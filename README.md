@@ -9,13 +9,20 @@ MedShare lets donors list unused, unexpired medicines with batch and expiry deta
 
 # Tech stack
 UI - HTML5, CSS3
+
 Logic - JavaScript (DOM manipulation, event handling)
+
 Backend - Node.js, Express.js
+
 Database 	MongoDB, Mongoose (ODM)
+
 Design - Figma
+
 Version control -	Git / GitHub Projects
 
 # Project status
  Phase 1 — Figma design, static HTML/CSS pages ----> DONE
+ 
  Phase 2 — JavaScript logic, DOM manipulation, event handling, form validation ----> IN PROGRESS
+ 
  Phase 3 — Node.js/Express backend, MongoDB integration, FEFO matching engine ---->IN PROGRESS

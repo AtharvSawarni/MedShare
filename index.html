@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MedShare — Don't waste unexpired medicines</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
   <header class="navbar">
     <a href="index.html" class="logo">
-      <span class="logo-mark" aria-hidden="true"></span>
+      <span class="logo-mark" aria-hidden="true"><i data-lucide="heart-pulse"></i></span>
       <span>Med<span class="accent">Share</span></span>
     </a>
     <nav class="main-nav" aria-label="Primary">
@@ -19,7 +20,7 @@
       <a href="browse.html">Browse Medicines</a>
       <a href="dashboard.html">Dashboard (NGO)</a>
     </nav>
-    <a href="#" class="btn btn-outline btn-small">Sign In</a>
+    <a href="#" class="btn btn-outline btn-small"><i data-lucide="log-in" aria-hidden="true"></i> Sign In</a>
   </header>
 
   <main>
@@ -34,8 +35,8 @@
           lifesaving medicine safely.
         </p>
         <div class="hero-actions">
-          <a href="donate.html" class="btn btn-primary">Donate Medicine <span aria-hidden="true">→</span></a>
-          <a href="browse.html" class="btn btn-outline">Request Medicine</a>
+          <a href="donate.html" class="btn btn-primary"><i data-lucide="pill" aria-hidden="true"></i> Donate Medicine <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+          <a href="browse.html" class="btn btn-outline"><i data-lucide="search" aria-hidden="true"></i> Request Medicine</a>
         </div>
       </div>
       <div class="hero-media">
@@ -51,17 +52,17 @@
 
       <div class="steps">
         <article class="step-card">
-          <div class="step-icon icon-list" aria-hidden="true"></div>
+          <div class="step-icon icon-list" aria-hidden="true"><i data-lucide="clipboard-list"></i></div>
           <h3>1. List Unused Medicine</h3>
           <p>Input basic details, batch numbers, and unexpired dates. Upload a photo for primary verification.</p>
         </article>
         <article class="step-card">
-          <div class="step-icon icon-verify" aria-hidden="true"></div>
+          <div class="step-icon icon-verify" aria-hidden="true"><i data-lucide="shield-check"></i></div>
           <h3>2. NGOs Verify &amp; Collect</h3>
           <p>Partner NGOs perform a strict standard inspection check and approve or coordinate safe collection protocols.</p>
         </article>
         <article class="step-card">
-          <div class="step-icon icon-deliver" aria-hidden="true"></div>
+          <div class="step-icon icon-deliver" aria-hidden="true"><i data-lucide="truck"></i></div>
           <h3>3. Delivered to Patients</h3>
           <p>Verified, essential medications are distributed to people in need or clinical patients who cannot afford treatment.</p>
         </article>
@@ -75,14 +76,17 @@
       </div>
       <div class="impact-stats">
         <div class="stat">
+          <i data-lucide="package-check" class="stat-icon" aria-hidden="true"></i>
           <p class="stat-number">48,250+</p>
           <p class="stat-label">Medicines Donated</p>
         </div>
         <div class="stat">
+          <i data-lucide="users" class="stat-icon" aria-hidden="true"></i>
           <p class="stat-number">12,400+</p>
           <p class="stat-label">Patients Helped</p>
         </div>
         <div class="stat">
+          <i data-lucide="badge-check" class="stat-icon" aria-hidden="true"></i>
           <p class="stat-number">85+</p>
           <p class="stat-label">Verified NGO Partners</p>
         </div>
@@ -94,7 +98,7 @@
   <footer class="site-footer">
     <div class="footer-top">
       <div class="footer-brand">
-        <p class="logo">Med<span class="accent">Share</span></p>
+        <p class="logo"><span class="logo-mark" aria-hidden="true"><i data-lucide="heart-pulse"></i></span>Med<span class="accent">Share</span></p>
         <p>Bridging medicine waste and healthcare access. We help you safely donate unexpired medicines to verified NGOs and healthcare providers serving people in need.</p>
       </div>
       <div class="footer-col">
@@ -119,12 +123,14 @@
     <div class="footer-bottom">
       <p>&copy; 2026 MedShare Platform. Dedicated to accessible healthcare.</p>
       <div class="socials" aria-label="Social media links">
-        <a href="#" aria-label="Facebook">FB</a>
-        <a href="#" aria-label="Twitter">TW</a>
-        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="Facebook"><i data-lucide="share-2" aria-hidden="true"></i></a>
+        <a href="#" aria-label="Twitter"><i data-lucide="message-circle" aria-hidden="true"></i></a>
+        <a href="#" aria-label="Instagram"><i data-lucide="camera" aria-hidden="true"></i></a>
       </div>
     </div>
   </footer>
+
+  <script>lucide.createIcons();</script>
 
 </body>
 </html>

@@ -248,3 +248,5 @@ img { max-width: 100%; display: block; }
   .impact { flex-direction: column; align-items: flex-start; }
   .footer-top { grid-template-columns: 1fr 1fr; }
 }
+
+/* ---------- Donate Page ---------- */

@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard (NGO) — MedShare</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
   <header class="navbar">
     <a href="index.html" class="logo">
-      <span class="logo-mark" aria-hidden="true"></span>
+      <span class="logo-mark" aria-hidden="true"><i data-lucide="heart-pulse"></i></span>
       <span>Med<span class="accent">Share</span></span>
     </a>
     <nav class="main-nav" aria-label="Primary">
@@ -19,7 +20,7 @@
       <a href="browse.html">Browse Medicines</a>
       <a href="dashboard.html" class="active">Dashboard (NGO)</a>
     </nav>
-    <a href="#" class="btn btn-outline btn-small">Sign In</a>
+    <a href="#" class="btn btn-outline btn-small"><i data-lucide="log-in" aria-hidden="true"></i> Sign In</a>
   </header>
 
   <main class="dashboard-page">
@@ -39,7 +40,7 @@
         <p class="stat-card-sub">Standard verified stock ready for dispatch</p>
       </div>
 
-      <div class="stat-card highlight">
+      <div class="stat-card ">
         <div class="stat-card-top">
           <span class="stat-card-label">Near Expiry (&lt;6 months)</span>
           <span class="trend-icon" aria-hidden="true">📈</span>
@@ -171,6 +172,8 @@
       </div>
     </div>
   </footer>
+
+  <script>lucide.createIcons();</script>
 
 </body>
 </html>

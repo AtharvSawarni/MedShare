@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Browse Medicines — MedShare</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
   <header class="navbar">
     <a href="index.html" class="logo">
-      <span class="logo-mark" aria-hidden="true"></span>
+      <span class="logo-mark" aria-hidden="true"><i data-lucide="heart-pulse"></i></span>
       <span>Med<span class="accent">Share</span></span>
     </a>
     <nav class="main-nav" aria-label="Primary">
@@ -19,7 +20,7 @@
       <a href="browse.html" class="active">Browse Medicines</a>
       <a href="dashboard.html">Dashboard (NGO)</a>
     </nav>
-    <a href="#" class="btn btn-outline btn-small">Sign In</a>
+    <a href="#" class="btn btn-outline btn-small"><i data-lucide="log-in" aria-hidden="true"></i> Sign In</a>
   </header>
 
   <main class="browse-page">
@@ -31,11 +32,11 @@
 
     <div class="browse-toolbar">
       <div class="search-bar">
-        <span class="s-icon" aria-hidden="true">🔍</span>
+        <span class="s-icon" aria-hidden="true"><i data-lucide="search"></i></span>
         <input type="text" placeholder="Search by drug name, chemical name or category…" aria-label="Search medicines">
       </div>
       <div class="location-select">
-        <span class="s-icon" aria-hidden="true">📍</span>
+        <span class="s-icon" aria-hidden="true"><i data-lucide="map-pin"></i></span>
         <select aria-label="Filter by location">
           <option>All Locations</option>
           <option>Gurugram</option>
@@ -173,6 +174,8 @@
       </div>
     </div>
   </footer>
+
+  <script>lucide.createIcons();</script>
 
 </body>
 </html>

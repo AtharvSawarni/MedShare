@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard (NGO) — MedShare</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">
+      <span class="logo-mark" aria-hidden="true"></span>
+      <span>Med<span class="accent">Share</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html">How It Works</a>
+      <a href="donate.html">Donate</a>
+      <a href="browse.html">Browse Medicines</a>
+      <a href="dashboard.html" class="active">Dashboard (NGO)</a>
+    </nav>
+    <a href="#" class="btn btn-outline btn-small">Sign In</a>
+  </header>
+
+  <main class="dashboard-page">
+
+    <div class="page-header">
+      <h1>Inventory Management</h1>
+      <p>Welcome back, <strong>Red Cross Clinic Admin</strong>. Manage medicine approvals and verify active donations.</p>
+    </div>
+
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <span class="stat-card-label">Available Medicines</span>
+          <span class="trend-icon" aria-hidden="true">📈</span>
+        </div>
+        <p class="stat-card-number">142</p>
+        <p class="stat-card-sub">Standard verified stock ready for dispatch</p>
+      </div>
+
+      <div class="stat-card highlight">
+        <div class="stat-card-top">
+          <span class="stat-card-label">Near Expiry (&lt;6 months)</span>
+          <span class="trend-icon" aria-hidden="true">📈</span>
+        </div>
+        <p class="stat-card-number">18</p>
+        <p class="stat-card-sub">Requires immediate clinic matching</p>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <span class="stat-card-label">Fulfilled Requests</span>
+          <span class="trend-icon" aria-hidden="true">📈</span>
+        </div>
+        <p class="stat-card-number">1,240</p>
+        <p class="stat-card-sub">Successfully shared since launch</p>
+      </div>
+    </div>
+
+    <div class="dashboard-layout">
+
+      <section class="card activity-card">
+        <h2>Recent Activity Logs</h2>
+        <table class="activity-table">
+          <thead>
+            <tr>
+              <th>Medicine Name</th>
+              <th>Participant</th>
+              <th>Qty</th>
+              <th>Expiry</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Metformin 500mg</td>
+              <td>Amelia Chen<span class="row-sub">Donor</span></td>
+              <td>3 Packs</td>
+              <td>11/2026</td>
+              <td><span class="status approved">Approved</span></td>
+            </tr>
+            <tr>
+              <td>Atorvastatin 20mg</td>
+              <td>Hope Clinic<span class="row-sub">Requester</span></td>
+              <td>40 Tabs</td>
+              <td>06/2026</td>
+              <td><span class="status pending">Pending</span></td>
+            </tr>
+            <tr>
+              <td>Albuterol Inhaler</td>
+              <td>Robert Vance<span class="row-sub">Donor</span></td>
+              <td>1 Inhaler</td>
+              <td>03/2026</td>
+              <td><span class="status fulfilled">Fulfilled</span></td>
+            </tr>
+            <tr>
+              <td>Paracetamol Drops</td>
+              <td>Lina Perez<span class="row-sub">Donor</span></td>
+              <td>1 Bottle</td>
+              <td>12/2026</td>
+              <td><span class="status approved">Approved</span></td>
+            </tr>
+            <tr>
+              <td>Amoxicillin 250mg</td>
+              <td>Grace Found.<span class="row-sub">Requester</span></td>
+              <td>15 Tabs</td>
+              <td>08/2026</td>
+              <td><span class="status fulfilled">Fulfilled</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <aside class="card distribution-card">
+        <h2>Category Distribution</h2>
+
+        <div class="dist-row">
+          <div class="dist-label"><span>Diabetes</span><span>70%</span></div>
+          <div class="dist-bar"><div class="dist-fill teal" style="width:70%"></div></div>
+        </div>
+        <div class="dist-row">
+          <div class="dist-label"><span>Cardiology</span><span>48%</span></div>
+          <div class="dist-bar"><div class="dist-fill blue" style="width:48%"></div></div>
+        </div>
+        <div class="dist-row">
+          <div class="dist-label"><span>Antibiotics</span><span>35%</span></div>
+          <div class="dist-bar"><div class="dist-fill green" style="width:35%"></div></div>
+        </div>
+        <div class="dist-row">
+          <div class="dist-label"><span>Pain Relievers</span><span>24%</span></div>
+          <div class="dist-bar"><div class="dist-fill amber" style="width:24%"></div></div>
+        </div>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <p class="logo">Med<span class="accent">Share</span></p>
+        <p>Bridging medicine waste and healthcare access. We help you safely donate unexpired medicines to verified NGOs and healthcare providers serving people in need.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="donate.html">Donate Medicine</a>
+        <a href="browse.html">Browse Directory</a>
+        <a href="index.html">How it Works</a>
+      </div>
+      <div class="footer-col">
+        <h4>For Partners</h4>
+        <a href="#">NGO Portal</a>
+        <a href="#">Verification Standards</a>
+        <a href="#">Safety Guidelines</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Contact Us</a>
+        <a href="#">FAQs</a>
+        <a href="#">Terms &amp; Privacy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 MedShare Platform. Dedicated to accessible healthcare.</p>
+      <div class="socials" aria-label="Social media links">
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="Twitter">TW</a>
+        <a href="#" aria-label="Instagram">IG</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

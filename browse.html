@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse Medicines — MedShare</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">
+      <span class="logo-mark" aria-hidden="true"></span>
+      <span>Med<span class="accent">Share</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html">How It Works</a>
+      <a href="donate.html">Donate</a>
+      <a href="browse.html" class="active">Browse Medicines</a>
+      <a href="dashboard.html">Dashboard (NGO)</a>
+    </nav>
+    <a href="#" class="btn btn-outline btn-small">Sign In</a>
+  </header>
+
+  <main class="browse-page">
+
+    <div class="page-header">
+      <h1>Browse Available Medicines</h1>
+      <p>Direct access to valid, inspected unexpired medicines safely collected by verified NGOs.</p>
+    </div>
+
+    <div class="browse-toolbar">
+      <div class="search-bar">
+        <span class="s-icon" aria-hidden="true">🔍</span>
+        <input type="text" placeholder="Search by drug name, chemical name or category…" aria-label="Search medicines">
+      </div>
+      <div class="location-select">
+        <span class="s-icon" aria-hidden="true">📍</span>
+        <select aria-label="Filter by location">
+          <option>All Locations</option>
+          <option>Gurugram</option>
+          <option>Delhi NCR</option>
+          <option>Hisar</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="topic-filters">
+      <span class="filter-label">Topic Category:</span>
+      <button class="pill active">All</button>
+      <button class="pill">Antibiotics</button>
+      <button class="pill">Cardiology</button>
+      <button class="pill">Diabetes</button>
+      <button class="pill">Pain Relievers</button>
+      <button class="pill">Pediatric</button>
+    </div>
+
+    <div class="medicine-grid">
+
+      <article class="med-card">
+        <div class="med-top">
+          <span class="med-category">Diabetes</span>
+          <span class="badge safe">Safe Expiry</span>
+        </div>
+        <h3>Metformin 500mg</h3>
+        <p class="med-meta">Qty: <strong>3 Packs</strong> &nbsp;·&nbsp; Expires: <strong>11/2026</strong></p>
+        <div class="med-footer">
+          <span class="donor"><span aria-hidden="true">👤</span> Individual Donor</span>
+          <a href="#" class="btn btn-primary btn-small">Request</a>
+        </div>
+      </article>
+
+      <article class="med-card">
+        <div class="med-top">
+          <span class="med-category">Antibiotics</span>
+          <span class="badge safe">Safe Expiry</span>
+        </div>
+        <h3>Amoxicillin 250mg</h3>
+        <p class="med-meta">Qty: <strong>15 Tablets</strong> &nbsp;·&nbsp; Expires: <strong>08/2026</strong></p>
+        <div class="med-footer">
+          <span class="donor"><span aria-hidden="true">👤</span> Individual Donor</span>
+          <a href="#" class="btn btn-primary btn-small">Request</a>
+        </div>
+      </article>
+
+      <article class="med-card">
+        <div class="med-top">
+          <span class="med-category">Cardiology</span>
+          <span class="badge warn">Expiring Soon</span>
+        </div>
+        <h3>Atorvastatin 20mg</h3>
+        <p class="med-meta">Qty: <strong>40 Tablets</strong> &nbsp;·&nbsp; Expires: <strong>06/2026</strong></p>
+        <div class="med-footer">
+          <span class="donor"><span aria-hidden="true">👤</span> Individual Donor</span>
+          <a href="#" class="btn btn-primary btn-small">Request</a>
+        </div>
+      </article>
+
+      <article class="med-card">
+        <div class="med-top">
+          <span class="med-category">Pain Relievers</span>
+          <span class="badge warn">Expiring Soon</span>
+        </div>
+        <h3>Ibuprofen 400mg</h3>
+        <p class="med-meta">Qty: <strong>2 Bottles</strong> &nbsp;·&nbsp; Expires: <strong>05/2026</strong></p>
+        <div class="med-footer">
+          <span class="donor"><span aria-hidden="true">👤</span> Individual Donor</span>
+          <a href="#" class="btn btn-primary btn-small">Request</a>
+        </div>
+      </article>
+
+      <article class="med-card">
+        <div class="med-top">
+          <span class="med-category">Respiratory</span>
+          <span class="badge urgent">Urgent Request Need</span>
+        </div>
+        <h3>Albuterol Inhaler</h3>
+        <p class="med-meta">Qty: <strong>1 Inhaler</strong> &nbsp;·&nbsp; Expires: <strong>03/2026</strong></p>
+        <div class="med-footer">
+          <span class="donor"><span aria-hidden="true">👤</span> Individual Donor</span>
+          <a href="#" class="btn btn-primary btn-small">Request</a>
+        </div>
+      </article>
+
+      <article class="med-card">
+        <div class="med-top">
+          <span class="med-category">Pediatric</span>
+          <span class="badge safe">Safe Expiry</span>
+        </div>
+        <h3>Paracetamol Drops</h3>
+        <p class="med-meta">Qty: <strong>1 Sealed Bottle</strong> &nbsp;·&nbsp; Expires: <strong>12/2026</strong></p>
+        <div class="med-footer">
+          <span class="donor"><span aria-hidden="true">👤</span> Individual Donor</span>
+          <a href="#" class="btn btn-primary btn-small">Request</a>
+        </div>
+      </article>
+
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <p class="logo">Med<span class="accent">Share</span></p>
+        <p>Bridging medicine waste and healthcare access. We help you safely donate unexpired medicines to verified NGOs and healthcare providers serving people in need.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="donate.html">Donate Medicine</a>
+        <a href="browse.html">Browse Directory</a>
+        <a href="index.html">How it Works</a>
+      </div>
+      <div class="footer-col">
+        <h4>For Partners</h4>
+        <a href="#">NGO Portal</a>
+        <a href="#">Verification Standards</a>
+        <a href="#">Safety Guidelines</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Contact Us</a>
+        <a href="#">FAQs</a>
+        <a href="#">Terms &amp; Privacy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 MedShare Platform. Dedicated to accessible healthcare.</p>
+      <div class="socials" aria-label="Social media links">
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="Twitter">TW</a>
+        <a href="#" aria-label="Instagram">IG</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

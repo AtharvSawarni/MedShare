@@ -114,6 +114,14 @@ app.post('/api/register', wrap(async (req, res) => {
   await write('users', users);
   res.status(201).json({ name, email: email.toLowerCase(), role });
 }));
-// ---------- more routes go here (added in the next commits) ----------
+
+app.post('/api/login', wrap(async (req, res) => {
+  const { email = '', password = '' } = req.body;
+  const user = (await read('users')).find((u) => u.email === email.toLowerCase());
+  if (!user || user.hash !== hash(password, user.salt)) {
+    return res.status(401).json({ error: 'Invalid email or password' });
+  }
+  res.json({ name: user.name, email: user.email, role: user.role });
+}));
 
 app.listen(PORT, () => console.log(`MedShare running at http://localhost:${PORT}`));

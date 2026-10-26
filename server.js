@@ -5,6 +5,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DATA = path.join(__dirname, 'data');
+const crypto = require('crypto');
 
 app.use(express.json());
 // Never expose server code or raw data files to the browser
@@ -14,6 +15,7 @@ app.use(express.static(__dirname));
 const read = async (name) => JSON.parse(await fs.readFile(path.join(DATA, name + '.json'), 'utf8'));
 const write = (name, data) => fs.writeFile(path.join(DATA, name + '.json'), JSON.stringify(data, null, 2));
 const newId = (prefix) => prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+const hash = (password, salt) => crypto.scryptSync(password, salt, 32).toString('hex');
 const wrap = (fn) => (req, res) => fn(req, res).catch((e) => res.status(500).json({ error: e.message }));
 
 // ---------- validation ----------
@@ -97,6 +99,21 @@ app.patch('/api/:col(medicines|requests)/:id', wrap(async (req, res) => {
   res.json(item);
 }));
 
+// ---------- auth (passwords stored as salted scrypt hashes) ----------
+app.post('/api/register', wrap(async (req, res) => {
+  const { name, email, password, role = 'donor' } = req.body;
+  if (!name || !email || !password || password.length < 6) {
+    return res.status(400).json({ error: 'Name, email and a password of 6+ characters are required' });
+  }
+  const users = await read('users');
+  if (users.some((u) => u.email === email.toLowerCase())) {
+    return res.status(409).json({ error: 'This email is already registered' });
+  }
+  const salt = crypto.randomBytes(8).toString('hex');
+  users.push({ id: newId('u'), name, email: email.toLowerCase(), role, salt, hash: hash(password, salt) });
+  await write('users', users);
+  res.status(201).json({ name, email: email.toLowerCase(), role });
+}));
 // ---------- more routes go here (added in the next commits) ----------
 
 app.listen(PORT, () => console.log(`MedShare running at http://localhost:${PORT}`));

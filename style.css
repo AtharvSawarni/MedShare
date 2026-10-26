@@ -1676,3 +1676,16 @@ img { max-width: 100%; display: block; }
 }
 .toast.success { background: var(--teal-dark); }
 .toast.error { background: #b91c1c; }
+
+/* ---------- Auth page ---------- */
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (max-width: 860px) {
+  .auth-layout { grid-template-columns: 1fr; }
+}

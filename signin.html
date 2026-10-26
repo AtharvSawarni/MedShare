@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — MedShare</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">
+      <span class="logo-mark" aria-hidden="true"><i data-lucide="heart-pulse"></i></span>
+      <span>Med<span class="accent">Share</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html">How It Works</a>
+      <a href="donate.html">Donate</a>
+      <a href="browse.html">Browse Medicines</a>
+      <a href="dashboard.html">Dashboard (NGO)</a>
+    </nav>
+    <a href="signin.html" class="btn btn-outline btn-small"><i data-lucide="log-in" aria-hidden="true"></i> Sign In</a>
+  </header>
+
+  <main class="donate-page">
+    <div class="page-header">
+      <h1>Welcome to MedShare</h1>
+      <p>Sign in to track your donations and requests, or create a free account.</p>
+    </div>
+
+    <div class="auth-layout">
+      <section class="card">
+        <h2>Sign In</h2>
+        <form id="login-form" action="#" method="post">
+          <div class="form-row field">
+            <label for="login-email">Email <span class="required">*</span></label>
+            <input type="email" id="login-email" name="email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-row field">
+            <label for="login-password">Password <span class="required">*</span></label>
+            <input type="password" id="login-password" name="password" placeholder="Your password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Sign In</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Create Account</h2>
+        <form id="register-form" action="#" method="post">
+          <div class="form-row field">
+            <label for="reg-name">Full Name / Organization <span class="required">*</span></label>
+            <input type="text" id="reg-name" name="name" placeholder="e.g., Red Cross Clinic" required>
+          </div>
+          <div class="form-row field">
+            <label for="reg-email">Email <span class="required">*</span></label>
+            <input type="email" id="reg-email" name="email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-row field">
+            <label for="reg-password">Password <span class="required">*</span></label>
+            <input type="password" id="reg-password" name="password" placeholder="At least 6 characters" required>
+          </div>
+          <div class="form-row field">
+            <label for="reg-role">I am a <span class="required">*</span></label>
+            <select id="reg-role" name="role" required>
+              <option value="donor">Donor</option>
+              <option value="ngo">NGO / Clinic</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Create Account</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <p class="logo">Med<span class="accent">Share</span></p>
+        <p>Bridging medicine waste and healthcare access. We help you safely donate unexpired medicines to verified NGOs and healthcare providers serving people in need.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="donate.html">Donate Medicine</a>
+        <a href="browse.html">Browse Directory</a>
+        <a href="index.html">How it Works</a>
+      </div>
+      <div class="footer-col">
+        <h4>For Partners</h4>
+        <a href="dashboard.html">NGO Portal</a>
+        <a href="#">Verification Standards</a>
+        <a href="#">Safety Guidelines</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Contact Us</a>
+        <a href="#">FAQs</a>
+        <a href="#">Terms &amp; Privacy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 MedShare Platform. Dedicated to accessible healthcare.</p>
+      <div class="socials" aria-label="Social media links">
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="Twitter">TW</a>
+        <a href="#" aria-label="Instagram">IG</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

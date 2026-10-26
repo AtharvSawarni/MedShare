@@ -28,3 +28,49 @@ async function loadMedicine() {
 }
 
 loadMedicine();
+
+function clearFieldErrors(form) {
+  form.querySelectorAll('.field-error').forEach(el => el.remove());
+  form.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
+}
+
+function showFieldError(input, message) {
+  input.classList.add('invalid');
+  const span = document.createElement('span');
+  span.className = 'field-error';
+  span.textContent = message;
+  input.insertAdjacentElement('afterend', span);
+}
+
+function validateRequest(form) {
+  clearFieldErrors(form);
+  let ok = true;
+
+  const name = form.elements.namedItem('requesterName');
+  if (!name.value.trim()) {
+    showFieldError(name, 'Enter your name or organisation');
+    ok = false;
+  }
+
+  const contact = form.elements.namedItem('contact');
+  const c = contact.value.trim();
+  const isEmail = /^\S+@\S+\.\S+$/.test(c);
+  const isPhone = /^\d{10}$/.test(c.replace(/[\s-]/g, ''));
+  if (!isEmail && !isPhone) {
+    showFieldError(contact, 'Enter a valid email or 10-digit phone number');
+    ok = false;
+  }
+
+  const quantity = form.elements.namedItem('quantity');
+  if (!quantity.value.trim()) {
+    showFieldError(quantity, 'Enter the quantity needed');
+    ok = false;
+  }
+  return ok;
+}
+
+requestForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (!validateRequest(requestForm)) return;
+  console.log('request valid');
+});

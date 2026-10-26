@@ -1,0 +1,4 @@
+[
+  { "id": "r1", "medicineId": "m3", "requesterName": "Hope Clinic", "requesterType": "Clinic", "contact": "hope@example.org", "quantity": "40 Tablets", "reason": "", "status": "pending", "createdAt": "2026-10-20T09:00:00.000Z" },
+  { "id": "r2", "medicineId": "m2", "requesterName": "Grace Foundation", "requesterType": "NGO", "contact": "grace@example.org", "quantity": "15 Tablets", "reason": "", "status": "fulfilled", "createdAt": "2026-10-18T11:30:00.000Z" }
+]

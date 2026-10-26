@@ -19,3 +19,30 @@ const API = {
   post: (url, body) => API.request('POST', url, body),
   patch: (url, body) => API.request('PATCH', url, body),
 };
+
+// ---------- Expiry logic ----------
+// Accepts "YYYY-MM-DD" (date input) or "YYYY-MM" (treated as last day of that month)
+function parseExpiry(value) {
+  const m = /^(\d{4})-(\d{2})(?:-(\d{2}))?$/.exec(value || '');
+  if (!m) return null;
+  const [y, mo, d] = [Number(m[1]), Number(m[2]), m[3] ? Number(m[3]) : 0];
+  return d ? new Date(y, mo - 1, d) : new Date(y, mo, 0);
+}
+
+function getExpiryInfo(expiry) {
+  const daysLeft = Math.ceil((parseExpiry(expiry) - new Date()) / 86400000);
+  // "status" matches the CSS badge classes: safe / warn / urgent
+  if (daysLeft < 0) return { daysLeft, status: 'urgent', label: 'Expired' };
+  if (daysLeft < 60) return { daysLeft, status: 'urgent', label: 'Urgent: use first' };
+  if (daysLeft < 180) return { daysLeft, status: 'warn', label: 'Expiring Soon' };
+  return { daysLeft, status: 'safe', label: 'Safe Expiry' };
+}
+
+// Shown as MM/YYYY, e.g. "04/2027"
+const formatExpiry = (expiry) => {
+  const d = parseExpiry(expiry);
+  return String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
+};
+
+// FEFO: First-Expiry-First-Out (nearest expiry first)
+const fefoSort = (list) => [...list].sort((a, b) => parseExpiry(a.expiry) - parseExpiry(b.expiry));

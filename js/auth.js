@@ -46,8 +46,22 @@ loginForm.addEventListener('submit', (e) => {
   console.log('login valid');
 });
 
-registerForm.addEventListener('submit', (e) => {
+registerForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!validateAuth(registerForm, true)) return;
-  console.log('register valid');
+
+  const body = {
+    name: registerForm.elements.namedItem('name').value.trim(),
+    email: registerForm.elements.namedItem('email').value.trim(),
+    password: registerForm.elements.namedItem('password').value,
+    role: registerForm.elements.namedItem('role').value
+  };
+
+  const res = await API.post('/api/register', body);
+  if (res.ok) {
+    showToast('Account created. You can sign in now.');
+    registerForm.reset();
+  } else {
+    showToast(res.data.error, 'error');
+  }
 });

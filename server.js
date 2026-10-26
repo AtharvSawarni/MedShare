@@ -64,6 +64,27 @@ app.post('/api/donations', wrap(async (req, res) => {
   res.status(201).json(item);
 }));
 
+// ---------- requests ----------
+app.get('/api/requests', wrap(async (req, res) => res.json(await read('requests'))));
+
+app.post('/api/requests', wrap(async (req, res) => {
+  const { medicineId, requesterName, requesterType = 'NGO', contact, quantity, reason = '' } = req.body;
+  if (!medicineId || !requesterName || !contact || !quantity) {
+    return res.status(400).json({ error: 'Medicine, name, contact and quantity are required' });
+  }
+  if (!(await read('medicines')).some((m) => m.id === medicineId)) {
+    return res.status(404).json({ error: 'Medicine not found' });
+  }
+  const list = await read('requests');
+  const item = {
+    id: newId('r'), medicineId, requesterName, requesterType, contact, quantity, reason,
+    status: 'pending', createdAt: new Date().toISOString(),
+  };
+  list.push(item);
+  await write('requests', list);
+  res.status(201).json(item);
+}));
+
 // ---------- more routes go here (added in the next commits) ----------
 
 app.listen(PORT, () => console.log(`MedShare running at http://localhost:${PORT}`));

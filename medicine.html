@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medicine Details — MedShare</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">
+      <span class="logo-mark" aria-hidden="true"><i data-lucide="heart-pulse"></i></span>
+      <span>Med<span class="accent">Share</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html">How It Works</a>
+      <a href="donate.html">Donate</a>
+      <a href="browse.html">Browse Medicines</a>
+      <a href="dashboard.html">Dashboard (NGO)</a>
+    </nav>
+    <a href="signin.html" class="btn btn-outline btn-small"><i data-lucide="log-in" aria-hidden="true"></i> Sign In</a>
+  </header>
+
+    <main class="donate-page">
+    <div class="page-header">
+      <a href="browse.html" class="back-link">&larr; Back to Browse</a>
+      <h1 id="d-name">Medicine Details</h1>
+      <p id="d-category">Loading…</p>
+    </div>
+
+    <section class="card" style="max-width: 760px; margin: 0 auto;">
+      <span id="d-badge" class="badge safe">Safe Expiry</span>
+      <dl class="details-grid">
+        <div><dt>Quantity</dt><dd id="d-qty">—</dd></div>
+        <div><dt>Expiry</dt><dd id="d-expiry">—</dd></div>
+        <div><dt>Batch Number</dt><dd id="d-batch">—</dd></div>
+        <div><dt>Location</dt><dd id="d-location">—</dd></div>
+        <div><dt>Donor</dt><dd id="d-donor">—</dd></div>
+        <div><dt>Status</dt><dd id="d-status">—</dd></div>
+      </dl>
+      <a href="request.html" id="request-btn" class="btn btn-primary">Request This Medicine</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <p class="logo">Med<span class="accent">Share</span></p>
+        <p>Bridging medicine waste and healthcare access. We help you safely donate unexpired medicines to verified NGOs and healthcare providers serving people in need.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="donate.html">Donate Medicine</a>
+        <a href="browse.html">Browse Directory</a>
+        <a href="index.html">How it Works</a>
+      </div>
+      <div class="footer-col">
+        <h4>For Partners</h4>
+        <a href="dashboard.html">NGO Portal</a>
+        <a href="#">Verification Standards</a>
+        <a href="#">Safety Guidelines</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Contact Us</a>
+        <a href="#">FAQs</a>
+        <a href="#">Terms &amp; Privacy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 MedShare Platform. Dedicated to accessible healthcare.</p>
+      <div class="socials" aria-label="Social media links">
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="Twitter">TW</a>
+        <a href="#" aria-label="Instagram">IG</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1689,3 +1689,23 @@ img { max-width: 100%; display: block; }
 @media (max-width: 860px) {
   .auth-layout { grid-template-columns: 1fr; }
 }
+
+/* ---------- Medicine details page ---------- */
+.back-link { display: inline-block; margin-bottom: 12px; font-size: 0.85rem; color: var(--teal-dark); }
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 24px;
+  margin: 20px 0;
+}
+.details-grid dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--gray-500, #6b7280);
+}
+.details-grid dd { font-weight: 600; margin-top: 2px; }
+
+@media (max-width: 860px) {
+  .details-grid { grid-template-columns: 1fr; }
+}

@@ -18,6 +18,11 @@ async function loadMedicine() {
   }
 
   const m = res.data;
+    if (m.status !== 'available') {
+    summary.textContent = 'This medicine is not available for request.';
+    submitButton.disabled = true;
+    return;
+  }
   const info = getExpiryInfo(m.expiry);
   summary.innerHTML =
     '<strong>' + escapeHTML(m.name) + '</strong><br>' +

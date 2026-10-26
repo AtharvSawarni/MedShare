@@ -46,3 +46,20 @@ const formatExpiry = (expiry) => {
 
 // FEFO: First-Expiry-First-Out (nearest expiry first)
 const fefoSort = (list) => [...list].sort((a, b) => parseExpiry(a.expiry) - parseExpiry(b.expiry));
+
+// ---------- Small utilities ----------
+const getParam = (name) => new URLSearchParams(window.location.search).get(name);
+
+// Always escape JSON data before putting it into innerHTML
+const escapeHTML = (s) => String(s).replace(/[&<>"']/g, (c) => (
+  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+));
+
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.setAttribute('role', 'status');
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3500);
+}

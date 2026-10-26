@@ -1658,3 +1658,21 @@ img { max-width: 100%; display: block; }
   .dashboard-layout { grid-template-columns: 1fr; }
   .activity-table { display: block; overflow-x: auto; white-space: nowrap; }
 }
+
+/* ---------- Shared UI states ---------- */
+.field input.invalid,
+.field select.invalid,
+.field textarea.invalid { border-color: #dc2626; }
+.field-error { color: #dc2626; font-size: 0.78rem; margin-top: 4px; }
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9rem;
+  z-index: 50;
+}
+.toast.success { background: var(--teal-dark); }
+.toast.error { background: #b91c1c; }

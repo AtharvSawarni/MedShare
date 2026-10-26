@@ -32,7 +32,7 @@
     <div class="auth-layout">
       <section class="card">
         <h2>Sign In</h2>
-        <form id="login-form" action="#" method="post">
+        <form id="login-form" action="#" method="post" novalidate>
           <div class="form-row field">
             <label for="login-email">Email <span class="required">*</span></label>
             <input type="email" id="login-email" name="email" placeholder="you@example.com" required>
@@ -47,7 +47,7 @@
 
       <section class="card">
         <h2>Create Account</h2>
-        <form id="register-form" action="#" method="post">
+        <form id="register-form" action="#" method="post" novalidate>
           <div class="form-row field">
             <label for="reg-name">Full Name / Organization <span class="required">*</span></label>
             <input type="text" id="reg-name" name="name" placeholder="e.g., Red Cross Clinic" required>
@@ -109,6 +109,7 @@
   </footer>
 
   <script src="js/main.js"></script>
-  <script>lucide.createIcons();</script>
+<script src="js/auth.js"></script>
+<script>lucide.createIcons();</script>
 </body>
 </html>

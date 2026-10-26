@@ -16,6 +16,30 @@ const write = (name, data) => fs.writeFile(path.join(DATA, name + '.json'), JSON
 const newId = (prefix) => prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
 const wrap = (fn) => (req, res) => fn(req, res).catch((e) => res.status(500).json({ error: e.message }));
 
+// ---------- validation ----------
+// Accepts "YYYY-MM-DD" (date input) or "YYYY-MM" (treated as last day of that month)
+function parseExpiry(value) {
+  const m = /^(\d{4})-(\d{2})(?:-(\d{2}))?$/.exec(value || '');
+  if (!m) return null;
+  const [y, mo, d] = [Number(m[1]), Number(m[2]), m[3] ? Number(m[3]) : 0];
+  const date = d ? new Date(y, mo - 1, d) : new Date(y, mo, 0);
+  return isNaN(date) ? null : date;
+}
+
+function validateDonation(b) {
+  const errors = {};
+  ['name', 'category', 'expiry', 'quantity', 'location'].forEach((k) => {
+    if (!b[k] || !String(b[k]).trim()) errors[k] = 'This field is required';
+  });
+  if (b.expiry) {
+    const date = parseExpiry(b.expiry);
+    const minDate = new Date();
+    minDate.setMonth(minDate.getMonth() + 1);
+    if (!date || date < minDate) errors.expiry = 'Expiry must be at least 1 month from today';
+  }
+  return errors;
+}
+
 // ---------- medicines ----------
 app.get('/api/medicines', wrap(async (req, res) => res.json(await read('medicines'))));
 

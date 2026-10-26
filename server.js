@@ -7,8 +7,9 @@ const PORT = process.env.PORT || 3000;
 const DATA = path.join(__dirname, 'data');
 
 app.use(express.json());
+// Never expose server code or raw data files to the browser
+app.use(['/data', '/server.js', '/package.json', '/node_modules'], (req, res) => res.status(403).end());
 app.use(express.static(__dirname));
-
 // ---------- helpers ----------
 const read = async (name) => JSON.parse(await fs.readFile(path.join(DATA, name + '.json'), 'utf8'));
 const write = (name, data) => fs.writeFile(path.join(DATA, name + '.json'), JSON.stringify(data, null, 2));

@@ -40,10 +40,23 @@ function validateAuth(form, needName) {
   return ok;
 }
 
-loginForm.addEventListener('submit', (e) => {
+loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!validateAuth(loginForm, false)) return;
-  console.log('login valid');
+
+  const body = {
+    email: loginForm.elements.namedItem('email').value.trim(),
+    password: loginForm.elements.namedItem('password').value
+  };
+
+  const res = await API.post('/api/login', body);
+  if (res.ok) {
+    localStorage.setItem('user', JSON.stringify(res.data));
+    showToast('Welcome back, ' + res.data.name + '!');
+    loginForm.reset();
+  } else {
+    showToast(res.data.error, 'error');
+  }
 });
 
 registerForm.addEventListener('submit', async (e) => {

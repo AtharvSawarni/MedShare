@@ -36,7 +36,7 @@
           <span class="stat-card-label">Available Medicines</span>
           <span class="trend-icon" aria-hidden="true">📈</span>
         </div>
-        <p class="stat-card-number">142</p>
+        <p class="stat-card-number" id="stat-available">142</p>
         <p class="stat-card-sub">Standard verified stock ready for dispatch</p>
       </div>
 
@@ -45,7 +45,7 @@
           <span class="stat-card-label">Near Expiry (&lt;6 months)</span>
           <span class="trend-icon" aria-hidden="true">📈</span>
         </div>
-        <p class="stat-card-number">18</p>
+        <p class="stat-card-number" id="stat-near-expiry">18</p>
         <p class="stat-card-sub">Requires immediate clinic matching</p>
       </div>
 
@@ -54,7 +54,7 @@
           <span class="stat-card-label">Fulfilled Requests</span>
           <span class="trend-icon" aria-hidden="true">📈</span>
         </div>
-        <p class="stat-card-number">1,240</p>
+        <p class="stat-card-number" id="stat-fulfilled">1,240</p>
         <p class="stat-card-sub">Successfully shared since launch</p>
       </div>
     </div>
@@ -73,7 +73,7 @@
               <th>Status</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="activity-body">
             <tr>
               <td>Metformin 500mg</td>
               <td>Amelia Chen<span class="row-sub">Donor</span></td>
@@ -116,21 +116,23 @@
       <aside class="card distribution-card">
         <h2>Category Distribution</h2>
 
-        <div class="dist-row">
-          <div class="dist-label"><span>Diabetes</span><span>70%</span></div>
-          <div class="dist-bar"><div class="dist-fill teal" style="width:70%"></div></div>
-        </div>
-        <div class="dist-row">
-          <div class="dist-label"><span>Cardiology</span><span>48%</span></div>
-          <div class="dist-bar"><div class="dist-fill blue" style="width:48%"></div></div>
-        </div>
-        <div class="dist-row">
-          <div class="dist-label"><span>Antibiotics</span><span>35%</span></div>
-          <div class="dist-bar"><div class="dist-fill green" style="width:35%"></div></div>
-        </div>
-        <div class="dist-row">
-          <div class="dist-label"><span>Pain Relievers</span><span>24%</span></div>
-          <div class="dist-bar"><div class="dist-fill amber" style="width:24%"></div></div>
+        <div id="dist-list">
+          <div class="dist-row">
+            <div class="dist-label"><span>Diabetes</span><span>70%</span></div>
+            <div class="dist-bar"><div class="dist-fill teal" style="width:70%"></div></div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-label"><span>Cardiology</span><span>48%</span></div>
+            <div class="dist-bar"><div class="dist-fill blue" style="width:48%"></div></div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-label"><span>Antibiotics</span><span>35%</span></div>
+            <div class="dist-bar"><div class="dist-fill green" style="width:35%"></div></div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-label"><span>Pain Relievers</span><span>24%</span></div>
+            <div class="dist-bar"><div class="dist-fill amber" style="width:24%"></div></div>
+          </div>
         </div>
       </aside>
 
@@ -173,6 +175,8 @@
     </div>
   </footer>
 
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
   <script>lucide.createIcons();</script>
 
 </body>

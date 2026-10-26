@@ -48,6 +48,22 @@ app.get('/api/medicines/:id', wrap(async (req, res) => {
   item ? res.json(item) : res.status(404).json({ error: 'Medicine not found' });
 }));
 
+// ---------- donations ----------
+app.post('/api/donations', wrap(async (req, res) => {
+  const errors = validateDonation(req.body);
+  if (Object.keys(errors).length) return res.status(400).json({ errors });
+  const { name, category, batch = '', expiry, quantity, location, notes = '' } = req.body;
+  const list = await read('medicines');
+  const item = {
+    id: newId('m'), name: name.trim(), category, batch, expiry, quantity: quantity.trim(),
+    location: location.trim(), notes, donorName: 'Individual Donor', status: 'pending',
+    createdAt: new Date().toISOString(),
+  };
+  list.push(item);
+  await write('medicines', list);
+  res.status(201).json(item);
+}));
+
 // ---------- more routes go here (added in the next commits) ----------
 
 app.listen(PORT, () => console.log(`MedShare running at http://localhost:${PORT}`));

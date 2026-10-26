@@ -85,6 +85,18 @@ app.post('/api/requests', wrap(async (req, res) => {
   res.status(201).json(item);
 }));
 
+// ---------- status updates (used by the dashboard Approve / Fulfil buttons) ----------
+app.patch('/api/:col(medicines|requests)/:id', wrap(async (req, res) => {
+  const allowed = ['available', 'pending', 'approved', 'fulfilled', 'rejected'];
+  if (!allowed.includes(req.body.status)) return res.status(400).json({ error: 'Invalid status' });
+  const list = await read(req.params.col);
+  const item = list.find((x) => x.id === req.params.id);
+  if (!item) return res.status(404).json({ error: 'Not found' });
+  item.status = req.body.status;
+  await write(req.params.col, list);
+  res.json(item);
+}));
+
 // ---------- more routes go here (added in the next commits) ----------
 
 app.listen(PORT, () => console.log(`MedShare running at http://localhost:${PORT}`));

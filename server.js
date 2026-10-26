@@ -16,6 +16,14 @@ const write = (name, data) => fs.writeFile(path.join(DATA, name + '.json'), JSON
 const newId = (prefix) => prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
 const wrap = (fn) => (req, res) => fn(req, res).catch((e) => res.status(500).json({ error: e.message }));
 
-// ---------- routes go here (added in the next commits) ----------
+// ---------- medicines ----------
+app.get('/api/medicines', wrap(async (req, res) => res.json(await read('medicines'))));
+
+app.get('/api/medicines/:id', wrap(async (req, res) => {
+  const item = (await read('medicines')).find((m) => m.id === req.params.id);
+  item ? res.json(item) : res.status(404).json({ error: 'Medicine not found' });
+}));
+
+// ---------- more routes go here (added in the next commits) ----------
 
 app.listen(PORT, () => console.log(`MedShare running at http://localhost:${PORT}`));

@@ -23,6 +23,8 @@ Version control -	Git / GitHub Projects
 # Project status
  Phase 1 — Figma design, static HTML/CSS pages ----> DONE
  
- Phase 2 — JavaScript logic, DOM manipulation, event handling, form validation ----> IN PROGRESS
+ Phase 2 — JavaScript logic, DOM manipulation, event handling, form validation ----> DONE
  
  Phase 3 — Node.js/Express backend, MongoDB integration, FEFO matching engine ---->IN PROGRESS
+
+ 

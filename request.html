@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request Medicine — MedShare</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">
+      <span class="logo-mark" aria-hidden="true"><i data-lucide="heart-pulse"></i></span>
+      <span>Med<span class="accent">Share</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html">How It Works</a>
+      <a href="donate.html">Donate</a>
+      <a href="browse.html">Browse Medicines</a>
+      <a href="dashboard.html">Dashboard (NGO)</a>
+    </nav>
+    <a href="signin.html" class="btn btn-outline btn-small"><i data-lucide="log-in" aria-hidden="true"></i> Sign In</a>
+  </header>
+
+    <main class="donate-page">
+    <div class="page-header">
+      <h1>Request Medicine</h1>
+      <p>Tell us who needs this medicine. A partner NGO will verify your request before dispatch.</p>
+    </div>
+
+    <div class="donate-layout">
+      <section class="card form-card">
+        <h2>Requester Details</h2>
+        <form id="request-form" action="#" method="post">
+          <input type="hidden" id="medicine-id" name="medicineId">
+          <div class="form-row two-col">
+            <div class="field">
+              <label for="requester-name">Name / Organization <span class="required">*</span></label>
+              <input type="text" id="requester-name" name="requesterName" placeholder="e.g., Hope Clinic" required>
+            </div>
+            <div class="field">
+              <label for="requester-type">Requester Type <span class="required">*</span></label>
+              <select id="requester-type" name="requesterType" required>
+                <option value="NGO">NGO</option>
+                <option value="Clinic">Clinic</option>
+                <option value="Patient">Individual Patient</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row two-col">
+            <div class="field">
+              <label for="contact">Phone or Email <span class="required">*</span></label>
+              <input type="text" id="contact" name="contact" placeholder="How can we reach you?" required>
+            </div>
+            <div class="field">
+              <label for="req-quantity">Quantity Needed <span class="required">*</span></label>
+              <input type="text" id="req-quantity" name="quantity" placeholder="e.g., 1 pack" required>
+            </div>
+          </div>
+          <div class="form-row field">
+            <label for="reason">Reason / Notes</label>
+            <textarea id="reason" name="reason" rows="3" placeholder="Why is this medicine needed?"></textarea>
+          </div>
+          <div class="form-footer">
+            <p class="required-note">* Required fields</p>
+            <button type="submit" class="btn btn-primary">Submit Request</button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="card guidelines-card">
+        <h2>Requested Medicine</h2>
+        <div id="med-summary">
+          <p class="g-text">No medicine selected. Pick one from <a href="browse.html" class="accent">Browse Medicines</a>.</p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <p class="logo">Med<span class="accent">Share</span></p>
+        <p>Bridging medicine waste and healthcare access. We help you safely donate unexpired medicines to verified NGOs and healthcare providers serving people in need.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="donate.html">Donate Medicine</a>
+        <a href="browse.html">Browse Directory</a>
+        <a href="index.html">How it Works</a>
+      </div>
+      <div class="footer-col">
+        <h4>For Partners</h4>
+        <a href="dashboard.html">NGO Portal</a>
+        <a href="#">Verification Standards</a>
+        <a href="#">Safety Guidelines</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Contact Us</a>
+        <a href="#">FAQs</a>
+        <a href="#">Terms &amp; Privacy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 MedShare Platform. Dedicated to accessible healthcare.</p>
+      <div class="socials" aria-label="Social media links">
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="Twitter">TW</a>
+        <a href="#" aria-label="Instagram">IG</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

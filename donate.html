@@ -35,7 +35,7 @@
       <section class="card form-card">
         <h2>Medicine Details</h2>
 
-        <form action="#" method="post">
+        <form id="donate-form" action="#" method="post" novalidate>
           <div class="form-row two-col">
             <div class="field">
               <label for="medicine-name">Medicine Name <span class="required">*</span></label>
@@ -45,11 +45,13 @@
               <label for="category">Category <span class="required">*</span></label>
               <select id="category" name="category" required>
                 <option value="" selected disabled>Select medicine category</option>
-                <option value="tablets">Tablets</option>
-                <option value="syrups">Syrups</option>
-                <option value="injectables">Injectables</option>
-                <option value="ointments">Ointments</option>
-                <option value="other">Other</option>
+              <option value="Diabetes">Diabetes</option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Antibiotics">Antibiotics</option>
+              <option value="Pain Relievers">Pain Relievers</option>
+              <option value="Pediatric">Pediatric</option>
+              <option value="Respiratory">Respiratory</option>
+              <option value="Other">Other</option>
               </select>
             </div>
           </div>
@@ -72,7 +74,7 @@
           <div class="form-row">
             <div class="field">
               <label for="pickup-location">Pickup Location / Address <span class="required">*</span></label>
-              <input type="text" id="pickup-location" name="pickup-location" placeholder="Enter complete address for courier/NGO collection" required>
+              <input type="text" id="pickup-location" name="pickup-location" placeholder="City first, e.g. Gurugram, Sector 45, full address" required>
             </div>
           </div>
 
@@ -162,7 +164,9 @@
     </div>
   </footer>
 
-  <script>lucide.createIcons();</script>
+<script src="js/main.js"></script>
+<script src="js/donate.js"></script>
+<script>lucide.createIcons();</script>
 
 </body>
 </html>

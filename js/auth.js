@@ -1,0 +1,80 @@
+const loginForm = document.getElementById('login-form');
+const registerForm = document.getElementById('register-form');
+
+function clearFieldErrors(form) {
+  form.querySelectorAll('.field-error').forEach(el => el.remove());
+  form.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
+}
+
+function showFieldError(input, message) {
+  input.classList.add('invalid');
+  const span = document.createElement('span');
+  span.className = 'field-error';
+  span.textContent = message;
+  input.insertAdjacentElement('afterend', span);
+}
+
+function validateAuth(form, needName) {
+  clearFieldErrors(form);
+  let ok = true;
+
+  if (needName) {
+    const name = form.elements.namedItem('name');
+    if (!name.value.trim()) {
+      showFieldError(name, 'Enter your name');
+      ok = false;
+    }
+  }
+
+  const email = form.elements.namedItem('email');
+  if (!/^\S+@\S+\.\S+$/.test(email.value.trim())) {
+    showFieldError(email, 'Enter a valid email address');
+    ok = false;
+  }
+
+  const password = form.elements.namedItem('password');
+  if (password.value.length < 6) {
+    showFieldError(password, 'Password must be at least 6 characters');
+    ok = false;
+  }
+  return ok;
+}
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!validateAuth(loginForm, false)) return;
+
+  const body = {
+    email: loginForm.elements.namedItem('email').value.trim(),
+    password: loginForm.elements.namedItem('password').value
+  };
+
+  const res = await API.post('/api/login', body);
+  if (res.ok) {
+    localStorage.setItem('user', JSON.stringify(res.data));
+    showToast('Welcome back, ' + res.data.name + '!');
+    loginForm.reset();
+  } else {
+    showToast(res.data.error, 'error');
+  }
+});
+
+registerForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!validateAuth(registerForm, true)) return;
+
+  const body = {
+    name: registerForm.elements.namedItem('name').value.trim(),
+    email: registerForm.elements.namedItem('email').value.trim(),
+    password: registerForm.elements.namedItem('password').value,
+    role: registerForm.elements.namedItem('role').value
+  };
+
+  const res = await API.post('/api/register', body);
+  if (res.ok) {
+    showToast('Account created. You can sign in now.');
+    registerForm.reset();
+  } else {
+    showToast(res.data.error, 'error');
+  }
+});

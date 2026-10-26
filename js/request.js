@@ -69,8 +69,29 @@ function validateRequest(form) {
   return ok;
 }
 
-requestForm.addEventListener('submit', (e) => {
+requestForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!validateRequest(requestForm)) return;
-  console.log('request valid');
+
+  const f = requestForm.elements;
+  const body = {
+    medicineId: medicineIdInput.value,
+    requesterName: f.namedItem('requesterName').value.trim(),
+    requesterType: f.namedItem('requesterType').value,
+    contact: f.namedItem('contact').value.trim(),
+    quantity: f.namedItem('quantity').value.trim(),
+    reason: f.namedItem('reason').value.trim()
+  };
+
+  submitButton.disabled = true;
+  const res = await API.post('/api/requests', body);
+
+  if (res.ok) {
+    showToast('Request sent! The NGO will review it.');
+    requestForm.reset();
+    setTimeout(() => { window.location.href = 'browse.html'; }, 1500);
+  } else {
+    submitButton.disabled = false;
+    showToast(res.data.error, 'error');
+  }
 });

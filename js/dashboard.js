@@ -24,6 +24,35 @@ async function loadData() {
 function renderDashboard() {
   renderStats();
   renderActivity();
+  renderDistribution();
+}
+const BAR_COLORS = ['teal', 'blue', 'green', 'amber'];
+
+function renderDistribution() {
+  const list = document.getElementById('dist-list');
+  const available = medicines.filter(m => m.status === 'available');
+
+  if (available.length === 0) {
+    list.innerHTML = '<p class="g-text">No available medicines yet.</p>';
+    return;
+  }
+
+  const counts = {};
+  available.forEach(m => {
+    const cat = m.category || 'Other';
+    counts[cat] = (counts[cat] || 0) + 1;
+  });
+
+  const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+
+  list.innerHTML = entries.map(([cat, n], i) => {
+    const pct = Math.round((n / available.length) * 100);
+    return `
+      <div class="dist-row">
+        <div class="dist-label"><span>${escapeHTML(cat)}</span><span>${pct}%</span></div>
+        <div class="dist-bar"><div class="dist-fill ${BAR_COLORS[i % BAR_COLORS.length]}" style="width:${pct}%"></div></div>
+      </div>`;
+  }).join('');
 }
 function statusLabel(s) {
   return s.charAt(0).toUpperCase() + s.slice(1);

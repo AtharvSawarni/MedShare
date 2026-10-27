@@ -33,11 +33,11 @@
     <div class="browse-toolbar">
       <div class="search-bar">
         <span class="s-icon" aria-hidden="true"><i data-lucide="search"></i></span>
-        <input type="text" placeholder="Search by drug name, chemical name or category…" aria-label="Search medicines">
+        <input type="text" id="search-input" placeholder="Search by drug name, chemical name or category…" aria-label="Search medicines">
       </div>
       <div class="location-select">
         <span class="s-icon" aria-hidden="true"><i data-lucide="map-pin"></i></span>
-        <select aria-label="Filter by location">
+        <select id="location-select" aria-label="Filter by location">
           <option>All Locations</option>
           <option>Gurugram</option>
           <option>Delhi NCR</option>
@@ -48,12 +48,13 @@
 
     <div class="topic-filters">
       <span class="filter-label">Topic Category:</span>
-      <button class="pill active">All</button>
-      <button class="pill">Antibiotics</button>
-      <button class="pill">Cardiology</button>
-      <button class="pill">Diabetes</button>
-      <button class="pill">Pain Relievers</button>
-      <button class="pill">Pediatric</button>
+      <button class="pill active" data-category="All">All</button>
+      <button class="pill" data-category="Antibiotics">Antibiotics</button>
+      <button class="pill" data-category="Cardiology">Cardiology</button>
+      <button class="pill" data-category="Diabetes">Diabetes</button>
+      <button class="pill" data-category="Pain Relievers">Pain Relievers</button>
+      <button class="pill" data-category="Pediatric">Pediatric</button>
+      <button class="pill" data-category="Respiratory">Respiratory</button>
     </div>
 
     <div class="medicine-grid" id="medicine-grid"></div>

@@ -36,7 +36,33 @@ async function loadMedicines() {
   }
   // Only verified (available) medicines that have not expired
   allMedicines = res.data.filter((m) => m.status === 'available' && getExpiryInfo(m.expiry).daysLeft >= 0);
-  renderMedicines(allMedicines);
+  applyFilters();
 }
+
+// ---------- Search and filters ----------
+const searchInput = document.getElementById('search-input');
+const locationSelect = document.getElementById('location-select');
+const pills = document.querySelectorAll('.pill');
+const filters = { search: '', location: 'All Locations', category: 'All' };
+
+function applyFilters() {
+  const text = filters.search.trim().toLowerCase();
+  const result = allMedicines.filter((m) => {
+    const matchesText = !text || m.name.toLowerCase().includes(text) || m.category.toLowerCase().includes(text);
+    const matchesLocation = filters.location === 'All Locations' || m.location === filters.location;
+    const matchesCategory = filters.category === 'All' || m.category === filters.category;
+    return matchesText && matchesLocation && matchesCategory;
+  });
+  renderMedicines(result);
+}
+
+searchInput.addEventListener('input', () => { filters.search = searchInput.value; applyFilters(); });
+locationSelect.addEventListener('change', () => { filters.location = locationSelect.value; applyFilters(); });
+pills.forEach((pill) => pill.addEventListener('click', () => {
+  pills.forEach((p) => p.classList.remove('active'));
+  pill.classList.add('active');
+  filters.category = pill.dataset.category;
+  applyFilters();
+}));
 
 loadMedicines();

@@ -93,7 +93,7 @@ function renderActivity() {
   const rows = buildActivityRows();
 
   if (rows.length === 0) {
-    body.innerHTML = '<tr><td colspan="5">No activity yet.</td></tr>';
+    body.innerHTML = '<tr><td colspan="6">No activity yet.</td></tr>';
     return;
   }
 
@@ -104,8 +104,47 @@ function renderActivity() {
       <td>${escapeHTML(r.qty)}</td>
       <td>${r.expiry ? formatExpiry(r.expiry) : '—'}</td>
       <td><span class="status ${statusClass(r.status)}">${statusLabel(r.status)}</span></td>
+            <td><span class="status ${statusClass(r.status)}">${statusLabel(r.status)}</span></td>
+      <td>${actionButton(r)}</td>
+    </tr>
     </tr>
   `).join('');
+}
+function makeButton(label, kind, id, next) {
+  return `<button class="btn btn-primary btn-small" data-kind="${kind}" data-id="${escapeHTML(id)}" data-next="${next}">${label}</button>`;
+}
+
+function actionButton(r) {
+  if (r.kind === 'request' && r.status === 'pending')  return makeButton('Approve', 'request', r.id, 'approved');
+  if (r.kind === 'request' && r.status === 'approved') return makeButton('Fulfil', 'request', r.id, 'fulfilled');
+  if (r.kind === 'donation' && r.status === 'pending') return makeButton('Approve', 'donation', r.id, 'available');
+  return '—';
+}
+
+const SUCCESS_MESSAGES = {
+  'donation:available': 'Donation approved and listed.',
+  'request:approved': 'Request approved.',
+  'request:fulfilled': 'Request marked as fulfilled.'
+};
+
+async function handleAction(e) {
+  const btn = e.target.closest('button[data-id]');
+  if (!btn) return;
+
+  const { kind, id, next } = btn.dataset;
+  const url = (kind === 'donation' ? '/api/medicines/' : '/api/requests/') + id;
+
+  btn.disabled = true;
+  const res = await API.patch(url, { status: next });
+
+  if (!res.ok) {
+    showToast(res.data.error || 'Update failed.', 'error');
+    btn.disabled = false;
+    return;
+  }
+
+  showToast(SUCCESS_MESSAGES[kind + ':' + next]);
+  await loadData();
 }
 
 function renderStats() {
@@ -117,4 +156,7 @@ function renderStats() {
   document.getElementById('stat-near-expiry').textContent = nearExpiry.length;
   document.getElementById('stat-fulfilled').textContent = fulfilled.length;
 }
-document.addEventListener('DOMContentLoaded', loadData);
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('activity-body').addEventListener('click', handleAction);
+  loadData();
+});

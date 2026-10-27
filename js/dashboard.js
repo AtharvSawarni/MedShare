@@ -1,5 +1,5 @@
 // js/dashboard.js
-// Dashboard page logic. Uses helpers from js/main.js (API, showToast, etc.)
+// Dashboard logic. Uses helpers from js/main.js.
 
 let medicines = [];
 let requests = [];
@@ -22,10 +22,8 @@ async function loadData() {
 }
 
 function renderDashboard() {
-  // Temporary: just prove the data arrived. Later commits fill this in.
   console.log('medicines:', medicines);
   console.log('requests:', requests);
 }
 
 document.addEventListener('DOMContentLoaded', loadData);
-console.log('dashboard.js loaded');

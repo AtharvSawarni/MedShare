@@ -23,6 +23,60 @@ async function loadData() {
 
 function renderDashboard() {
   renderStats();
+  renderActivity();
+}
+function statusLabel(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+// "available" has no badge style of its own, so reuse the green "approved" one
+function statusClass(s) {
+  return s === 'available' ? 'approved' : s;
+}
+
+// Join requests to medicines, and add pending donations
+function buildActivityRows() {
+  const rows = [];
+
+  medicines.filter(m => m.status === 'pending').forEach(m => {
+    rows.push({
+      kind: 'donation', id: m.id, name: m.name,
+      who: m.donorName || 'Donor', role: 'Donor',
+      qty: m.quantity, expiry: m.expiry, status: m.status
+    });
+  });
+
+  const newestFirst = [...requests].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  newestFirst.forEach(r => {
+    const med = medicines.find(m => m.id === r.medicineId);
+    rows.push({
+      kind: 'request', id: r.id, name: med ? med.name : 'Unknown medicine',
+      who: r.requesterName, role: 'Requester',
+      qty: r.quantity, expiry: med ? med.expiry : null, status: r.status
+    });
+  });
+
+  return rows.slice(0, 10);
+}
+
+function renderActivity() {
+  const body = document.getElementById('activity-body');
+  const rows = buildActivityRows();
+
+  if (rows.length === 0) {
+    body.innerHTML = '<tr><td colspan="5">No activity yet.</td></tr>';
+    return;
+  }
+
+  body.innerHTML = rows.map(r => `
+    <tr>
+      <td>${escapeHTML(r.name)}</td>
+      <td>${escapeHTML(r.who)}<span class="row-sub">${r.role}</span></td>
+      <td>${escapeHTML(r.qty)}</td>
+      <td>${r.expiry ? formatExpiry(r.expiry) : '—'}</td>
+      <td><span class="status ${statusClass(r.status)}">${statusLabel(r.status)}</span></td>
+    </tr>
+  `).join('');
 }
 
 function renderStats() {

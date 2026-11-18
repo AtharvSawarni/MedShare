@@ -139,6 +139,73 @@
 
     </div>
 
+    <section class="card inventory-card">
+      <h2>Manage Inventory</h2>
+      <table class="activity-table">
+        <thead>
+          <tr>
+            <th>Medicine</th>
+            <th>Qty</th>
+            <th>Expiry</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="inventory-body"></tbody>
+      </table>
+    </section>
+
+    <dialog id="edit-dialog" class="edit-dialog">
+      <form id="edit-form" novalidate>
+        <h2>Edit Medicine</h2>
+        <div class="form-row two-col">
+          <div class="field">
+            <label for="edit-name">Medicine Name</label>
+            <input type="text" id="edit-name" name="name">
+          </div>
+          <div class="field">
+            <label for="edit-category">Category</label>
+            <select id="edit-category" name="category">
+              <option value="Diabetes">Diabetes</option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Antibiotics">Antibiotics</option>
+              <option value="Pain Relievers">Pain Relievers</option>
+              <option value="Pediatric">Pediatric</option>
+              <option value="Respiratory">Respiratory</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row three-col">
+          <div class="field">
+            <label for="edit-batch">Batch Number</label>
+            <input type="text" id="edit-batch" name="batch">
+          </div>
+          <div class="field">
+            <label for="edit-expiry">Expiry Date</label>
+            <input type="date" id="edit-expiry" name="expiry">
+          </div>
+          <div class="field">
+            <label for="edit-quantity">Quantity</label>
+            <input type="text" id="edit-quantity" name="quantity">
+          </div>
+        </div>
+        <div class="form-row field">
+          <label for="edit-location">Location</label>
+          <input type="text" id="edit-location" name="location">
+        </div>
+        <div class="form-row field">
+          <label for="edit-notes">Notes</label>
+          <textarea id="edit-notes" name="notes" rows="2"></textarea>
+        </div>
+        <div class="dialog-actions">
+          <button type="button" class="btn btn-outline" id="edit-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </dialog>
+
   </main>
 
   <footer class="site-footer">

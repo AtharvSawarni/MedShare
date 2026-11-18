@@ -25,6 +25,7 @@ function renderDashboard() {
   renderStats();
   renderActivity();
   renderDistribution();
+  renderInventory();
 }
 const BAR_COLORS = ['teal', 'blue', 'green', 'amber'];
 
@@ -154,7 +155,117 @@ function renderStats() {
   document.getElementById('stat-near-expiry').textContent = nearExpiry.length;
   document.getElementById('stat-fulfilled').textContent = fulfilled.length;
 }
+// ---------- Manage inventory: edit and delete medicines ----------
+function renderInventory() {
+  const body = document.getElementById('inventory-body');
+
+  if (medicines.length === 0) {
+    body.innerHTML = '<tr><td colspan="6">No medicines in the inventory yet.</td></tr>';
+    return;
+  }
+
+  // FEFO: nearest expiry first, so the medicines that need action are at the top
+  body.innerHTML = fefoSort(medicines).map(m => `
+    <tr>
+      <td>${escapeHTML(m.name)}<span class="row-sub">${escapeHTML(m.category)}</span></td>
+      <td>${escapeHTML(m.quantity)}</td>
+      <td>${formatExpiry(m.expiry)}</td>
+      <td>${escapeHTML(m.location)}</td>
+      <td><span class="status ${statusClass(m.status)}">${statusLabel(m.status)}</span></td>
+      <td class="row-actions">
+        <button class="btn btn-outline btn-small" data-action="edit" data-id="${escapeHTML(m.id)}">Edit</button>
+        <button class="btn btn-danger btn-small" data-action="delete" data-id="${escapeHTML(m.id)}">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function handleInventoryClick(e) {
+  const btn = e.target.closest('button[data-action]');
+  if (!btn) return;
+  if (btn.dataset.action === 'edit') openEditDialog(btn.dataset.id);
+  if (btn.dataset.action === 'delete') deleteMedicine(btn.dataset.id);
+}
+
+async function deleteMedicine(id) {
+  const med = medicines.find(m => m.id === id);
+  if (!med) return;
+  if (!confirm('Delete "' + med.name + '"? Requests made for it will be deleted too.')) return;
+
+  const res = await API.request('DELETE', '/api/medicines/' + id);
+  if (!res.ok) {
+    showToast(res.data.error || 'Delete failed.', 'error');
+    return;
+  }
+  showToast('Medicine deleted.');
+  await loadData();
+}
+
+// ---------- Edit dialog ----------
+const editDialog = document.getElementById('edit-dialog');
+const editForm = document.getElementById('edit-form');
+const EDIT_FIELDS = ['name', 'category', 'batch', 'expiry', 'quantity', 'location', 'notes'];
+
+function clearEditErrors() {
+  editForm.querySelectorAll('.field-error').forEach(el => el.remove());
+  editForm.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
+}
+
+function showEditError(fieldName, message) {
+  const input = editForm.elements.namedItem(fieldName);
+  if (!input) return;
+  input.classList.add('invalid');
+  const span = document.createElement('span');
+  span.className = 'field-error';
+  span.textContent = message;
+  input.insertAdjacentElement('afterend', span);
+}
+
+function openEditDialog(id) {
+  const med = medicines.find(m => m.id === id);
+  if (!med) return;
+  clearEditErrors();
+  editForm.dataset.id = id;
+  EDIT_FIELDS.forEach(f => { editForm.elements.namedItem(f).value = med[f] || ''; });
+  editDialog.showModal();
+}
+
+async function saveEdit(e) {
+  e.preventDefault();
+  clearEditErrors();
+
+  const body = {};
+  EDIT_FIELDS.forEach(f => { body[f] = editForm.elements.namedItem(f).value.trim(); });
+
+  let ok = true;
+  ['name', 'category', 'expiry', 'quantity', 'location'].forEach(f => {
+    if (!body[f]) { showEditError(f, 'This field is required'); ok = false; }
+  });
+  if (!ok) return;
+
+  const saveBtn = editForm.querySelector('button[type="submit"]');
+  saveBtn.disabled = true;
+  const res = await API.patch('/api/medicines/' + editForm.dataset.id, body);
+  saveBtn.disabled = false;
+
+  if (!res.ok) {
+    if (res.data.errors) {
+      Object.entries(res.data.errors).forEach(([field, msg]) => showEditError(field, msg));
+    } else {
+      showToast(res.data.error || 'Update failed.', 'error');
+    }
+    return;
+  }
+
+  editDialog.close();
+  showToast('Medicine updated.');
+  await loadData();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('activity-body').addEventListener('click', handleAction);
+  document.getElementById('inventory-body').addEventListener('click', handleInventoryClick);
+  editForm.addEventListener('submit', saveEdit);
+  document.getElementById('edit-cancel').addEventListener('click', () => editDialog.close());
   loadData();
 });

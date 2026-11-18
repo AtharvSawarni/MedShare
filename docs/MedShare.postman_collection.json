@@ -1,0 +1,705 @@
+{
+  "info": {
+    "name": "MedShare API",
+    "description": "Phase 3 API tests. Start the server (npm start) and run the folders in order: each request saves ids (medicineId, requestId) for the next ones.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Medicines",
+      "item": [
+        {
+          "name": "Get all medicines",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const list = pm.response.json();",
+                  "pm.test('Is an array of medicines with id', () => { pm.expect(list).to.be.an('array'); if (list.length) { pm.expect(list[0]).to.have.property('id'); pm.expect(list[0]).to.not.have.property('_id'); } });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/medicines"
+          }
+        },
+        {
+          "name": "Create donation (valid)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const d = new Date(); d.setMonth(d.getMonth() + 3);",
+                  "pm.collectionVariables.set('futureDate', d.toISOString().slice(0, 10));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                  "const m = pm.response.json();",
+                  "pm.test('New donation is pending', () => pm.expect(m.status).to.eql('pending'));",
+                  "pm.collectionVariables.set('medicineId', m.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/donations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Test Drug\",\n  \"category\": \"Diabetes\",\n  \"batch\": \"PM100\",\n  \"expiry\": \"{{futureDate}}\",\n  \"quantity\": \"3 packs\",\n  \"location\": \"Gurugram\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create donation (expiry too soon)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const s = new Date(); s.setDate(s.getDate() + 10);",
+                  "pm.collectionVariables.set('soonDate', s.toISOString().slice(0, 10));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Error is about expiry', () => pm.expect(pm.response.json().errors).to.have.property('expiry'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/donations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Test Drug\",\n  \"category\": \"Diabetes\",\n  \"batch\": \"PM100\",\n  \"expiry\": \"{{soonDate}}\",\n  \"quantity\": \"3 packs\",\n  \"location\": \"Gurugram\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create donation (empty body)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('All required fields reported', () => pm.expect(Object.keys(pm.response.json().errors).length).to.be.above(3));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/donations",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            }
+          }
+        },
+        {
+          "name": "Get one medicine",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Same id returned', () => pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get('medicineId')));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/medicines/{{medicineId}}"
+          }
+        },
+        {
+          "name": "Get unknown medicine",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/medicines/zzz"
+          }
+        },
+        {
+          "name": "Approve donation (PATCH status)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is available', () => pm.expect(pm.response.json().status).to.eql('available'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/medicines/{{medicineId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"available\"\n}"
+            }
+          }
+        },
+        {
+          "name": "PATCH invalid status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/medicines/{{medicineId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"hacked\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Edit quantity (PATCH details)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Quantity changed', () => pm.expect(pm.response.json().quantity).to.eql('5 packs'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/medicines/{{medicineId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": \"5 packs\"\n}"
+            }
+          }
+        },
+        {
+          "name": "FEFO match (nearest expiry first)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "pm.test('Finds the test donation', () => pm.expect(r.count).to.be.above(0));",
+                  "pm.test('Sorted by expiry, earliest first', () => { const e = r.matches.map(m => m.expiry); pm.expect(e).to.eql([...e].sort()); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/match?name=Postman"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Requests",
+      "item": [
+        {
+          "name": "Create request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                  "const r = pm.response.json();",
+                  "pm.test('Request is pending', () => pm.expect(r.status).to.eql('pending'));",
+                  "pm.collectionVariables.set('requestId', r.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/requests",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicineId\": \"{{medicineId}}\",\n  \"requesterName\": \"Hope Clinic\",\n  \"requesterType\": \"Clinic\",\n  \"contact\": \"9999999999\",\n  \"quantity\": \"1 pack\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Request for unknown medicine",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/requests",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicineId\": \"nope\",\n  \"requesterName\": \"A\",\n  \"contact\": \"1\",\n  \"quantity\": \"1\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Request with missing fields",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/requests",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicineId\": \"{{medicineId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get all requests",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Contains our request', () => pm.expect(pm.response.json().some(r => r.id === pm.collectionVariables.get('requestId'))).to.be.true);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/requests"
+          }
+        },
+        {
+          "name": "Approve request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is approved', () => pm.expect(pm.response.json().status).to.eql('approved'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/requests/{{requestId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"approved\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/requests/{{requestId}}"
+          }
+        },
+        {
+          "name": "Delete request again",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/requests/{{requestId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Cleanup",
+      "item": [
+        {
+          "name": "Delete medicine (also deletes its requests)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/medicines/{{medicineId}}"
+          }
+        },
+        {
+          "name": "Delete medicine again",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/medicines/{{medicineId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('userEmail', 'user' + Date.now() + '@test.com');"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Role is donor', () => pm.expect(pm.response.json().role).to.eql('donor'));",
+                  "pm.test('No password in reply', () => pm.expect(pm.response.json()).to.not.have.any.keys('hash', 'salt', 'password'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman User\",\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"secret1\",\n  \"role\": \"donor\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Register same email again",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman User\",\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"secret1\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login (correct password)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"secret1\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login (wrong password)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"wrong123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Who am I (logged in)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Email matches', () => pm.expect(pm.response.json().email).to.eql(pm.collectionVariables.get('userEmail')));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/me"
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/logout"
+          }
+        },
+        {
+          "name": "Who am I (after logout)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/me"
+          }
+        }
+      ]
+    }
+  ]
+}

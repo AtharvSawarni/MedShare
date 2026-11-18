@@ -104,9 +104,7 @@ function renderActivity() {
       <td>${escapeHTML(r.qty)}</td>
       <td>${r.expiry ? formatExpiry(r.expiry) : '—'}</td>
       <td><span class="status ${statusClass(r.status)}">${statusLabel(r.status)}</span></td>
-            <td><span class="status ${statusClass(r.status)}">${statusLabel(r.status)}</span></td>
       <td>${actionButton(r)}</td>
-    </tr>
     </tr>
   `).join('');
 }

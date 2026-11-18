@@ -86,18 +86,5 @@
     "location": "Delhi NCR",
     "donorName": "Individual Donor",
     "status": "available"
-  },
-  {
-    "id": "mmvpj2waim1t",
-    "name": "gatikjkk",
-    "category": "Respiratory",
-    "batch": "1",
-    "expiry": "2026-12-31",
-    "quantity": "69",
-    "location": "kjfh.",
-    "notes": "",
-    "donorName": "Individual Donor",
-    "status": "pending",
-    "createdAt": "2026-10-26T17:26:04.794Z"
   }
 ]

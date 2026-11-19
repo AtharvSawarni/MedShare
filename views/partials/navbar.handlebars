@@ -5,9 +5,11 @@
     </a>
     <nav class="main-nav" aria-label="Primary">
       <a href="index.html"{{#if (eq active 'index')}} class="active"{{/if}}>How It Works</a>
-      <a href="donate.html"{{#if (eq active 'donate')}} class="active"{{/if}}>Donate</a>
-      <a href="browse.html"{{#if (eq active 'browse')}} class="active"{{/if}}>Browse Medicines</a>
-      <a href="dashboard.html"{{#if (eq active 'dashboard')}} class="active"{{/if}}>Dashboard (NGO)</a>
+      <a id="donate-link" href="donate.html"{{#if (eq active 'donate')}} class="active"{{/if}}>Donate</a>
+      <a id="browse-link" href="browse.html"{{#if (eq active 'browse')}} class="active"{{/if}}>Browse Medicines</a>
+      <a id="dashboard-link" href="dashboard.html"{{#if (eq active 'dashboard')}} class="active"{{/if}} hidden>Dashboard (NGO)</a>
+      <a id="requests-link" href="requests.html"{{#if (eq active 'requests')}} class="active"{{/if}} hidden>My Requests</a>
+      <a id="donations-link" href="donations.html"{{#if (eq active 'donations')}} class="active"{{/if}} hidden>My Donations</a>
     </nav>
-    <a href="signin.html" class="btn btn-outline btn-small"><i data-lucide="log-in" aria-hidden="true"></i> Sign In</a>
+    <a id="auth-link" href="signin.html" class="btn btn-outline btn-small"><i data-lucide="log-in" aria-hidden="true"></i> Sign In</a>
   </header>

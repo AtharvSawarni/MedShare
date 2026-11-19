@@ -3,27 +3,36 @@
 
 let medicines = [];
 let requests = [];
+let loading = false;
 
 async function loadData() {
-  const [medRes, reqRes] = await Promise.all([
-    API.get('/api/medicines'),
-    API.get('/api/requests')
-  ]);
+  if (loading) return;
+  loading = true;
+  try {
+    const [medRes, reqRes] = await Promise.all([
+      API.get('/api/medicines'),
+      API.get('/api/requests')
+    ]);
 
-  if (!medRes.ok || !reqRes.ok) {
-    const msg = (!medRes.ok ? medRes.data.error : reqRes.data.error) || 'Could not load dashboard data.';
-    showToast(msg, 'error');
-    return;
+    if (!medRes.ok || !reqRes.ok) {
+      const msg = (!medRes.ok ? medRes.data.error : reqRes.data.error) || 'Could not load dashboard data.';
+      showToast(msg, 'error');
+      return;
+    }
+
+    medicines = medRes.data;
+    requests = reqRes.data;
+    renderDashboard();
+    const updated = document.getElementById('dashboard-updated');
+    if (updated) updated.textContent = `Updated ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+  } finally {
+    loading = false;
   }
-
-  medicines = medRes.data;
-  requests = reqRes.data;
-  renderDashboard();
 }
 
 function renderDashboard() {
   renderStats();
-  renderActivity();
+  renderApprovals();
   renderDistribution();
   renderInventory();
 }
@@ -64,50 +73,40 @@ function statusClass(s) {
   return s === 'available' ? 'approved' : s;
 }
 
-// Join requests to medicines, and add pending donations
-function buildActivityRows() {
-  const rows = [];
+function renderApprovals() {
+  const donationBody = document.getElementById('donation-approval-body');
+  const requestBody = document.getElementById('request-approval-body');
+  const pendingDonations = medicines.filter(m => m.status === 'pending');
+  const activeRequests = requests
+    .filter(r => ['pending', 'approved'].includes(r.status))
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  medicines.filter(m => m.status === 'pending').forEach(m => {
-    rows.push({
-      kind: 'donation', id: m.id, name: m.name,
-      who: m.donorName || 'Donor', role: 'Donor',
-      qty: m.quantity, expiry: m.expiry, status: m.status
-    });
-  });
+  donationBody.innerHTML = pendingDonations.length
+    ? pendingDonations.map(m => `
+      <tr>
+        <td>${escapeHTML(m.name)}<span class="row-sub">${escapeHTML(m.category)}</span></td>
+        <td>${escapeHTML(m.donorName || 'Donor')}</td>
+        <td>${escapeHTML(m.quantity)}</td>
+        <td>${formatExpiry(m.expiry)}</td>
+        <td>${actionButton({ kind: 'donation', id: m.id, status: m.status })}</td>
+      </tr>
+    `).join('')
+    : '<tr><td colspan="5">No donations awaiting approval.</td></tr>';
 
-  const newestFirst = [...requests].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  newestFirst.forEach(r => {
-    const med = medicines.find(m => m.id === r.medicineId);
-    rows.push({
-      kind: 'request', id: r.id, name: med ? med.name : 'Unknown medicine',
-      who: r.requesterName, role: 'Requester',
-      qty: r.quantity, expiry: med ? med.expiry : null, status: r.status
-    });
-  });
-
-  return rows.slice(0, 10);
-}
-
-function renderActivity() {
-  const body = document.getElementById('activity-body');
-  const rows = buildActivityRows();
-
-  if (rows.length === 0) {
-    body.innerHTML = '<tr><td colspan="6">No activity yet.</td></tr>';
-    return;
-  }
-
-  body.innerHTML = rows.map(r => `
-    <tr>
-      <td>${escapeHTML(r.name)}</td>
-      <td>${escapeHTML(r.who)}<span class="row-sub">${r.role}</span></td>
-      <td>${escapeHTML(r.qty)}</td>
-      <td>${r.expiry ? formatExpiry(r.expiry) : '—'}</td>
-      <td><span class="status ${statusClass(r.status)}">${statusLabel(r.status)}</span></td>
-      <td>${actionButton(r)}</td>
-    </tr>
-  `).join('');
+  requestBody.innerHTML = activeRequests.length
+    ? activeRequests.map(r => {
+      const med = medicines.find(m => m.id === r.medicineId);
+      return `
+        <tr>
+          <td>${escapeHTML(med ? med.name : 'Unknown medicine')}</td>
+          <td>${escapeHTML(r.requesterName)}<span class="row-sub">Contact: ${escapeHTML(r.contact)}</span></td>
+          <td>${escapeHTML(r.quantity)}</td>
+          <td>${escapeHTML(r.deliveryAddress)}</td>
+          <td><span class="status ${statusClass(r.status)}">${statusLabel(r.status)}</span></td>
+          <td>${actionButton({ kind: 'request', id: r.id, status: r.status })}</td>
+        </tr>`;
+    }).join('')
+    : '<tr><td colspan="6">No requests awaiting approval or fulfilment.</td></tr>';
 }
 function makeButton(label, kind, id, next) {
   return `<button class="btn btn-primary btn-small" data-kind="${kind}" data-id="${escapeHTML(id)}" data-next="${next}">${label}</button>`;
@@ -151,7 +150,7 @@ function renderStats() {
   const nearExpiry = available.filter(m => getExpiryInfo(m.expiry).daysLeft < 180);
   const fulfilled = requests.filter(r => r.status === 'fulfilled');
 
-  document.getElementById('stat-available').textContent = available.length;
+  document.getElementById('stat-available').textContent = medicines.length;
   document.getElementById('stat-near-expiry').textContent = nearExpiry.length;
   document.getElementById('stat-fulfilled').textContent = fulfilled.length;
 }
@@ -170,7 +169,7 @@ function renderInventory() {
       <td>${escapeHTML(m.name)}<span class="row-sub">${escapeHTML(m.category)}</span></td>
       <td>${escapeHTML(m.quantity)}</td>
       <td>${formatExpiry(m.expiry)}</td>
-      <td>${escapeHTML(m.location)}</td>
+      <td>${escapeHTML(m.location)}${m.address ? `<span class="row-sub">${escapeHTML(m.address)}</span>` : ''}</td>
       <td><span class="status ${statusClass(m.status)}">${statusLabel(m.status)}</span></td>
       <td class="row-actions">
         <button class="btn btn-outline btn-small" data-action="edit" data-id="${escapeHTML(m.id)}">Edit</button>
@@ -204,7 +203,7 @@ async function deleteMedicine(id) {
 // ---------- Edit dialog ----------
 const editDialog = document.getElementById('edit-dialog');
 const editForm = document.getElementById('edit-form');
-const EDIT_FIELDS = ['name', 'category', 'batch', 'expiry', 'quantity', 'location', 'notes'];
+const EDIT_FIELDS = ['name', 'category', 'batch', 'expiry', 'quantity', 'location', 'address', 'notes'];
 
 function clearEditErrors() {
   editForm.querySelectorAll('.field-error').forEach(el => el.remove());
@@ -263,9 +262,13 @@ async function saveEdit(e) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('activity-body').addEventListener('click', handleAction);
+  document.getElementById('donation-approval-body').addEventListener('click', handleAction);
+  document.getElementById('request-approval-body').addEventListener('click', handleAction);
   document.getElementById('inventory-body').addEventListener('click', handleInventoryClick);
   editForm.addEventListener('submit', saveEdit);
   document.getElementById('edit-cancel').addEventListener('click', () => editDialog.close());
   loadData();
+  setInterval(() => {
+    if (!document.hidden) loadData();
+  }, 10000);
 });

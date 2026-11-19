@@ -21,6 +21,25 @@ function startSession(res, user) {
   res.cookie('sid', sid, { httpOnly: true, sameSite: 'lax' });
 }
 
+function userSummary(user) {
+  return { id: String(user._id), name: user.name, email: user.email, role: user.role };
+}
+
+const requireAuth = (req, res, next) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: 'You must sign in first' });
+  req.user = user;
+  next();
+};
+
+const requireRole = (...roles) => (req, res, next) => {
+  const user = currentUser(req);
+  if (!user) return res.status(401).json({ error: 'You must sign in first' });
+  if (!roles.includes(user.role)) return res.status(403).json({ error: 'You do not have permission for this action' });
+  req.user = user;
+  next();
+};
+
 // ---------- routes ----------
 router.post('/register', wrap(async (req, res) => {
   const { name, email, password, role } = req.body;
@@ -33,9 +52,13 @@ router.post('/register', wrap(async (req, res) => {
   }
   const salt = crypto.randomBytes(8).toString('hex');
   const created = await User.create({
-    name, email: cleanEmail, role: role === 'ngo' ? 'ngo' : 'donor', salt, hash: hash(password, salt),
+    name,
+    email: cleanEmail,
+    role: role === 'ngo' ? 'ngo' : role === 'requester' ? 'requester' : 'donor',
+    salt,
+    hash: hash(password, salt),
   });
-  const user = { name: created.name, email: created.email, role: created.role };
+  const user = userSummary(created);
   startSession(res, user); // registering also logs the user in
   res.status(201).json(user);
 }));
@@ -46,7 +69,7 @@ router.post('/login', wrap(async (req, res) => {
   if (!found || found.hash !== hash(password, found.salt)) {
     return res.status(401).json({ error: 'Invalid email or password' });
   }
-  const user = { name: found.name, email: found.email, role: found.role };
+  const user = userSummary(found);
   startSession(res, user);
   res.json(user);
 }));
@@ -65,3 +88,5 @@ router.post('/logout', (req, res) => {
 
 module.exports = router;
 module.exports.currentUser = currentUser;
+module.exports.requireAuth = requireAuth;
+module.exports.requireRole = requireRole;

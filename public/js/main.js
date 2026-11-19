@@ -20,6 +20,49 @@ const API = {
   patch: (url, body) => API.request('PATCH', url, body),
 };
 
+async function updateNavigation() {
+  const authLink = document.getElementById('auth-link');
+  const donateLink = document.getElementById('donate-link');
+  const browseLink = document.getElementById('browse-link');
+  const dashboardLink = document.getElementById('dashboard-link');
+  const requestsLink = document.getElementById('requests-link');
+  const donationsLink = document.getElementById('donations-link');
+  if (!authLink || !donateLink || !browseLink || !dashboardLink || !requestsLink || !donationsLink) return;
+
+  const res = await API.get('/api/me');
+  if (!res.ok) {
+    donateLink.hidden = false;
+    browseLink.hidden = false;
+    dashboardLink.hidden = true;
+    requestsLink.hidden = true;
+    donationsLink.hidden = true;
+    authLink.innerHTML = '<i data-lucide="log-in" aria-hidden="true"></i> Sign In';
+    authLink.href = 'signin.html';
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
+
+  donateLink.hidden = res.data.role !== 'donor';
+  browseLink.hidden = ['donor', 'ngo'].includes(res.data.role);
+  dashboardLink.hidden = res.data.role !== 'ngo';
+  requestsLink.hidden = res.data.role !== 'requester';
+  donationsLink.hidden = res.data.role !== 'donor';
+  if (res.data.role === 'donor') {
+    donationsLink.href = 'donations.html';
+    donationsLink.textContent = 'My Donations';
+  }
+  authLink.innerHTML = '<i data-lucide="log-out" aria-hidden="true"></i> Sign Out';
+  authLink.href = '#';
+  authLink.addEventListener('click', async (event) => {
+    event.preventDefault();
+    await API.post('/api/logout');
+    window.location.href = '/index.html';
+  });
+  if (window.lucide) lucide.createIcons();
+}
+
+updateNavigation();
+
 // ---------- Expiry logic ----------
 // Accepts "YYYY-MM-DD" (date input) or "YYYY-MM" (treated as last day of that month)
 function parseExpiry(value) {

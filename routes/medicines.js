@@ -4,15 +4,21 @@ const Medicine = require('../models/Medicine');
 const Request = require('../models/Request');
 const wrap = require('../utils/wrap');
 const { STATUSES, validateMedicine } = require('../utils/validators');
+const { requireRole } = require('./auth');
 
 const router = express.Router();
-const EDITABLE = ['name', 'category', 'batch', 'expiry', 'quantity', 'location', 'notes', 'status'];
+const EDITABLE = ['name', 'category', 'batch', 'expiry', 'quantity', 'location', 'address', 'notes', 'status'];
 const findMedicine = (id) => (mongoose.isValidObjectId(id) ? Medicine.findById(id) : null);
 
 // READ: all medicines (optional filter: /api/medicines?status=available)
 router.get('/medicines', wrap(async (req, res) => {
   const filter = req.query.status ? { status: req.query.status } : {};
   res.json(await Medicine.find(filter).sort({ createdAt: 1 }));
+}));
+
+// READ: the signed-in donor's own donations
+router.get('/donations', requireRole('donor'), wrap(async (req, res) => {
+  res.json(await Medicine.find({ donorId: req.user.id }).sort({ createdAt: -1 }));
 }));
 
 // READ: one medicine
@@ -34,16 +40,18 @@ router.get('/match', wrap(async (req, res) => {
 }));
 
 // CREATE: a new donation. It waits for NGO approval, so status starts as "pending".
-router.post('/donations', wrap(async (req, res) => {
+router.post('/donations', requireRole('donor'), wrap(async (req, res) => {
   const errors = validateMedicine(req.body, true);
   if (Object.keys(errors).length) return res.status(400).json({ errors });
-  const { name, category, batch, expiry, quantity, location, notes } = req.body;
-  const item = await Medicine.create({ name, category, batch, expiry, quantity, location, notes });
+  const { name, category, batch, expiry, quantity, location, address, notes } = req.body;
+  const item = await Medicine.create({
+    name, category, batch, expiry, quantity, location, address, notes, donorId: req.user.id
+  });
   res.status(201).json(item);
 }));
 
 // UPDATE: change status (Approve / Fulfil) and/or edit details
-router.patch('/medicines/:id', wrap(async (req, res) => {
+router.patch('/medicines/:id', requireRole('ngo'), wrap(async (req, res) => {
   const item = await findMedicine(req.params.id);
   if (!item) return res.status(404).json({ error: 'Medicine not found' });
   if (req.body.status !== undefined && !STATUSES.includes(req.body.status)) {
@@ -57,7 +65,7 @@ router.patch('/medicines/:id', wrap(async (req, res) => {
 }));
 
 // DELETE: remove a medicine together with the requests made for it
-router.delete('/medicines/:id', wrap(async (req, res) => {
+router.delete('/medicines/:id', requireRole('ngo'), wrap(async (req, res) => {
   const item = await findMedicine(req.params.id);
   if (!item) return res.status(404).json({ error: 'Medicine not found' });
   await item.deleteOne();

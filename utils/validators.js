@@ -1,4 +1,5 @@
 const STATUSES = ['available', 'pending', 'approved', 'fulfilled', 'rejected'];
+const { parseQuantity } = require('./quantity');
 
 // Accepts "YYYY-MM-DD" (date input) or "YYYY-MM" (treated as the last day of that month)
 function parseExpiry(value) {
@@ -23,6 +24,12 @@ function validateMedicine(b, requireOneMonth) {
   ['name', 'category', 'expiry', 'quantity', 'location'].forEach((k) => {
     if (!b[k] || !String(b[k]).trim()) errors[k] = 'This field is required';
   });
+  if (requireOneMonth && (!b.address || !String(b.address).trim())) {
+    errors.address = 'This field is required';
+  }
+  if (requireOneMonth && (!parseQuantity(b.quantity) || parseQuantity(b.quantity).amount <= 0)) {
+    errors.quantity = 'Enter a quantity such as 2 packs';
+  }
   if (b.expiry && !errors.expiry) {
     const date = parseExpiry(b.expiry);
     const minDate = new Date();

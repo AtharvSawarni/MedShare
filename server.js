@@ -18,6 +18,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // only public/ is serv
 app.use('/api', require('./routes/medicines'));
 app.use('/api', require('./routes/requests'));
 app.use('/api', require('./routes/auth'));
+app.use('/api', require('./routes/pincode'));
 app.use('/', require('./routes/pages'));
 
 connectDB()

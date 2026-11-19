@@ -1,6 +1,16 @@
 /* ---------- Reset & base ---------- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+.field-hint {
+  display: block;
+  min-height: 1.1em;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: var(--gray-500, #6b7280);
+}
+.field-hint.ok { color: var(--teal-dark, #0f7a5c); }
+.field-hint.bad { color: #b91c1c; }
+
 :root {
   --teal: #1f9d78;
   --teal-dark: #0f7a5c;
@@ -553,6 +563,16 @@ img { max-width: 100%; display: block; }
   border-color: var(--teal);
 }
 .field textarea { resize: vertical; }
+.field input[readonly] {
+  background: var(--bg-soft);
+  color: var(--gray-700);
+  border-color: var(--gray-200);
+  cursor: not-allowed;
+}
+.field input[readonly]:focus {
+  outline: 1px solid var(--gray-200);
+  border-color: var(--gray-200);
+}
 
 .form-footer {
   display: flex;
@@ -1568,6 +1588,11 @@ img { max-width: 100%; display: block; }
 .trend-icon { font-size: 0.85rem; }
 .stat-card-number { font-size: 2rem; font-weight: 700; margin-bottom: 4px; }
 .stat-card-sub { font-size: 0.8rem; color: var(--gray-500); }
+.dashboard-updated {
+  color: var(--gray-500);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
 
 .dashboard-layout {
   display: grid;
@@ -1599,6 +1624,16 @@ img { max-width: 100%; display: block; }
   vertical-align: middle;
 }
 .activity-table tr:last-child td { border-bottom: none; }
+.approval-section + .approval-section {
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid var(--gray-200);
+}
+.section-subtitle {
+  margin: 6px 0 18px;
+  color: var(--gray-500);
+  font-size: 0.84rem;
+}
 .row-sub {
   display: block;
   font-size: 0.72rem;
@@ -1664,6 +1699,27 @@ img { max-width: 100%; display: block; }
 .field select.invalid,
 .field textarea.invalid { border-color: #dc2626; }
 .field-error { color: #dc2626; font-size: 0.78rem; margin-top: 4px; }
+
+.auth-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 24px;
+  padding: 16px 18px;
+  border: 1px solid #b9e6d5;
+  border-radius: var(--radius);
+  background: var(--teal-light);
+  color: var(--ink);
+}
+.auth-notice > div:first-child { display: grid; gap: 3px; }
+.auth-notice strong { color: var(--teal-dark); }
+.auth-notice span { color: var(--gray-700); font-size: 0.88rem; }
+.auth-notice-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 640px) {
+  .auth-notice { align-items: stretch; flex-direction: column; }
+  .auth-notice-actions { width: 100%; }
+}
 .toast {
   position: fixed;
   bottom: 24px;

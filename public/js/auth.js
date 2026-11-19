@@ -1,5 +1,23 @@
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
+const registerRole = registerForm.elements.namedItem('role');
+
+function getReturnTo() {
+  const returnTo = new URLSearchParams(window.location.search).get('returnTo');
+  return returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : null;
+}
+
+function getPostAuthDestination(role) {
+  return getReturnTo() || (role === 'ngo' ? 'dashboard.html' : role === 'donor' ? 'donations.html' : 'requests.html');
+}
+
+if (getReturnTo() === '/donate.html') {
+  registerRole.value = 'donor';
+  registerRole.disabled = true;
+} else if (getReturnTo()?.startsWith('/request.html')) {
+  registerRole.value = 'requester';
+  registerRole.disabled = true;
+}
 
 function clearFieldErrors(form) {
   form.querySelectorAll('.field-error').forEach(el => el.remove());
@@ -54,6 +72,9 @@ loginForm.addEventListener('submit', async (e) => {
     localStorage.setItem('user', JSON.stringify(res.data));
     showToast('Welcome back, ' + res.data.name + '!');
     loginForm.reset();
+    setTimeout(() => {
+      window.location.href = getPostAuthDestination(res.data.role);
+    }, 500);
   } else {
     showToast(res.data.error, 'error');
   }
@@ -72,8 +93,12 @@ registerForm.addEventListener('submit', async (e) => {
 
   const res = await API.post('/api/register', body);
   if (res.ok) {
-    showToast('Account created. You can sign in now.');
+    localStorage.setItem('user', JSON.stringify(res.data));
+    showToast('Account created. You are now signed in.');
     registerForm.reset();
+    setTimeout(() => {
+      window.location.href = getPostAuthDestination(res.data.role);
+    }, 500);
   } else {
     showToast(res.data.error, 'error');
   }

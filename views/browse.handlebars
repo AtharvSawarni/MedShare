@@ -1,0 +1,31 @@
+
+    <div class="page-header">
+      <h1>Browse Available Medicines</h1>
+      <p>Direct access to valid, inspected unexpired medicines safely collected by verified NGOs.</p>
+    </div>
+
+    <div class="browse-toolbar">
+      <div class="search-bar">
+        <span class="s-icon" aria-hidden="true"><i data-lucide="search"></i></span>
+        <input type="text" id="search-input" placeholder="Search by drug name, chemical name or category…" aria-label="Search medicines">
+      </div>
+      <div class="location-select">
+        <span class="s-icon" aria-hidden="true"><i data-lucide="map-pin"></i></span>
+        <select id="location-select" aria-label="Filter by location">
+          <option>All Locations</option>
+          <option>Gurugram</option>
+          <option>Delhi NCR</option>
+          <option>Hisar</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="topic-filters">
+      <span class="filter-label">Topic Category:</span>
+      <button class="pill active" data-category="All">All</button>
+      {{#each categories}}
+      <button class="pill" data-category="{{this}}">{{this}}</button>
+      {{/each}}
+    </div>
+
+    <div class="medicine-grid" id="medicine-grid"></div>

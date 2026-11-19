@@ -32,7 +32,7 @@
 - [ ] Open `medicine.html?id=zzz`: "Medicine not found"
 - [ ] Register twice with the same email: error shown
 - [ ] Wrong password: "Invalid email or password"
-- [ ] `/server.js`, `/.env` and `/data/medicines.json` in the browser show nothing (403)
+- [ ] `/server.js`, `/.env` and `/data/medicines.json` in the browser show Not found (404)
 
 ## Before the demo
 - [ ] Atlas Network Access allows your IP (or `0.0.0.0/0`)

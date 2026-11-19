@@ -27,4 +27,13 @@ Version control -	Git / GitHub Projects
  
  Phase 3 — Node.js/Express backend, MongoDB integration, FEFO matching engine ---->IN PROGRESS
 
+# Project structure
+- `views/` contains one Handlebars view per page. `views/layouts/main.handlebars` wraps every page, and `views/partials/` holds the shared navbar and footer.
+- `public/` contains static files served by Express: `style.css`, `js/` and `photos/`.
+- `routes/pages.js` renders the views with `res.render` and passes data such as landing page stats from MongoDB and the category list.
+- `routes/` contains the API routes for medicines, requests and auth.
+- `models/` contains the Mongoose schemas.
+- `config/db.js` handles the database connection.
+- `server.js` wires everything together.
+
  

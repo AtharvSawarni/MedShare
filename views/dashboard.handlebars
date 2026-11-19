@@ -1,17 +1,17 @@
 
     <div class="page-header">
       <h1>Inventory Management</h1>
-      <p>Welcome back, <strong>Red Cross Clinic Admin</strong>. Manage medicine approvals and verify active donations.</p>
+      <p>Welcome back, <strong>Red Cross Clinic Admin</strong>. Manage medicine approvals and verify active donations. <span id="dashboard-updated" class="dashboard-updated" aria-live="polite"></span></p>
     </div>
 
     <div class="stat-cards">
       <div class="stat-card">
         <div class="stat-card-top">
-          <span class="stat-card-label">Available Medicines</span>
+          <span class="stat-card-label">Total Medicines</span>
           <span class="trend-icon" aria-hidden="true">📈</span>
         </div>
         <p class="stat-card-number" id="stat-available">142</p>
-        <p class="stat-card-sub">Standard verified stock ready for dispatch</p>
+        <p class="stat-card-sub">All medicines currently recorded</p>
       </div>
 
       <div class="stat-card ">
@@ -36,56 +36,44 @@
     <div class="dashboard-layout">
 
       <section class="card activity-card">
-        <h2>Recent Activity Logs</h2>
-        <table class="activity-table">
-          <thead>
-            <tr>
-              <th>Medicine Name</th>
-              <th>Participant</th>
-              <th>Qty</th>
-              <th>Expiry</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="activity-body">
-            <tr>
-              <td>Metformin 500mg</td>
-              <td>Amelia Chen<span class="row-sub">Donor</span></td>
-              <td>3 Packs</td>
-              <td>11/2026</td>
-              <td><span class="status approved">Approved</span></td>
-            </tr>
-            <tr>
-              <td>Atorvastatin 20mg</td>
-              <td>Hope Clinic<span class="row-sub">Requester</span></td>
-              <td>40 Tabs</td>
-              <td>06/2026</td>
-              <td><span class="status pending">Pending</span></td>
-            </tr>
-            <tr>
-              <td>Albuterol Inhaler</td>
-              <td>Robert Vance<span class="row-sub">Donor</span></td>
-              <td>1 Inhaler</td>
-              <td>03/2026</td>
-              <td><span class="status fulfilled">Fulfilled</span></td>
-            </tr>
-            <tr>
-              <td>Paracetamol Drops</td>
-              <td>Lina Perez<span class="row-sub">Donor</span></td>
-              <td>1 Bottle</td>
-              <td>12/2026</td>
-              <td><span class="status approved">Approved</span></td>
-            </tr>
-            <tr>
-              <td>Amoxicillin 250mg</td>
-              <td>Grace Found.<span class="row-sub">Requester</span></td>
-              <td>15 Tabs</td>
-              <td>08/2026</td>
-              <td><span class="status fulfilled">Fulfilled</span></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="approval-section">
+          <h2>Donation Approvals</h2>
+          <p class="section-subtitle">Review medicines submitted by donors.</p>
+          <table class="activity-table">
+            <thead>
+              <tr>
+                <th>Medicine</th>
+                <th>Donor</th>
+                <th>Qty</th>
+                <th>Expiry</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="donation-approval-body">
+              <tr><td colspan="5">Loading donations...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="approval-section">
+          <h2>Requester Approvals</h2>
+          <p class="section-subtitle">Review requests and coordinate delivery.</p>
+          <table class="activity-table">
+            <thead>
+              <tr>
+                <th>Medicine</th>
+                <th>Requester</th>
+                <th>Qty</th>
+                <th>Delivery Details</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="request-approval-body">
+              <tr><td colspan="6">Loading requests...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <aside class="card distribution-card">
@@ -164,6 +152,10 @@
         <div class="form-row field">
           <label for="edit-location">Location</label>
           <input type="text" id="edit-location" name="location">
+        </div>
+        <div class="form-row field">
+          <label for="edit-address">Full Address</label>
+          <textarea id="edit-address" name="address" rows="2"></textarea>
         </div>
         <div class="form-row field">
           <label for="edit-notes">Notes</label>

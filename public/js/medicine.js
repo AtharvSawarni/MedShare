@@ -31,6 +31,7 @@ async function loadMedicine() {
   document.getElementById('d-expiry').textContent = formatExpiry(m.expiry) + ' (' + info.daysLeft + ' days left)';
   document.getElementById('d-batch').textContent = m.batch || 'Not provided';
   document.getElementById('d-location').textContent = m.location;
+  document.getElementById('d-address').textContent = m.address || 'Not provided';
   document.getElementById('d-donor').textContent = m.donorName;
   document.getElementById('d-status').textContent = m.status;
 

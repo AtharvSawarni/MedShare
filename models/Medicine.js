@@ -10,6 +10,8 @@ const medicineSchema = new mongoose.Schema(
     expiry: { type: String, required: true, set: normalizeExpiry }, // stored as YYYY-MM-DD
     quantity: { type: String, required: true, trim: true },
     location: { type: String, required: true, trim: true },
+    address: { type: String, default: '', trim: true },
+    donorId: { type: String, default: '', index: true },
     notes: { type: String, default: '' },
     donorName: { type: String, default: 'Individual Donor' },
     status: { type: String, enum: STATUSES, default: 'pending' },

@@ -3,6 +3,8 @@ const summary = document.getElementById('med-summary');
 const medicineIdInput = document.getElementById('medicine-id');
 const submitButton = requestForm.querySelector('button');
 const medicineId = getParam('id');
+const REQUEST_DRAFT_KEY = 'medshare:request-draft';
+const AUTO_SUBMIT_KEY = 'medshare:request-auto-submit';
 
 async function loadMedicine() {
   if (!medicineId) {
@@ -32,7 +34,31 @@ async function loadMedicine() {
   medicineIdInput.value = m.id;
 }
 
-loadMedicine();
+function saveRequestDraft() {
+  const fields = ['requesterName', 'requesterType', 'contact', 'deliveryAddress', 'quantity', 'reason'];
+  const draft = { medicineId: medicineIdInput.value };
+  fields.forEach((field) => { draft[field] = requestForm.elements[field].value; });
+  sessionStorage.setItem(REQUEST_DRAFT_KEY, JSON.stringify(draft));
+}
+
+function clearRequestDraft() {
+  sessionStorage.removeItem(REQUEST_DRAFT_KEY);
+  sessionStorage.removeItem(AUTO_SUBMIT_KEY);
+}
+
+function restoreRequestDraft() {
+  const rawDraft = sessionStorage.getItem(REQUEST_DRAFT_KEY);
+  if (!rawDraft) return;
+
+  const draft = JSON.parse(rawDraft);
+  ['requesterName', 'requesterType', 'contact', 'deliveryAddress', 'quantity', 'reason'].forEach((field) => {
+    if (draft[field] !== undefined) requestForm.elements[field].value = draft[field];
+  });
+  if (sessionStorage.getItem(AUTO_SUBMIT_KEY) === 'true') {
+    sessionStorage.removeItem(AUTO_SUBMIT_KEY);
+    setTimeout(() => requestForm.requestSubmit(), 0);
+  }
+}
 
 function clearFieldErrors(form) {
   form.querySelectorAll('.field-error').forEach(el => el.remove());
@@ -71,6 +97,12 @@ function validateRequest(form) {
     showFieldError(quantity, 'Enter the quantity needed');
     ok = false;
   }
+
+  const deliveryAddress = form.elements.namedItem('deliveryAddress');
+  if (!deliveryAddress.value.trim()) {
+    showFieldError(deliveryAddress, 'Enter the delivery address');
+    ok = false;
+  }
   return ok;
 }
 
@@ -84,6 +116,7 @@ requestForm.addEventListener('submit', async (e) => {
     requesterName: f.namedItem('requesterName').value.trim(),
     requesterType: f.namedItem('requesterType').value,
     contact: f.namedItem('contact').value.trim(),
+    deliveryAddress: f.namedItem('deliveryAddress').value.trim(),
     quantity: f.namedItem('quantity').value.trim(),
     reason: f.namedItem('reason').value.trim()
   };
@@ -93,10 +126,20 @@ requestForm.addEventListener('submit', async (e) => {
 
   if (res.ok) {
     showToast('Request sent! The NGO will review it.');
+    clearRequestDraft();
     requestForm.reset();
     setTimeout(() => { window.location.href = 'browse.html'; }, 1500);
+  } else if (res.status === 401) {
+    saveRequestDraft();
+    sessionStorage.setItem(AUTO_SUBMIT_KEY, 'true');
+    window.location.href = `/signin.html?returnTo=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+  } else if (res.status === 403) {
+    submitButton.disabled = false;
+    showToast(res.data.error || 'Only requester accounts can submit medicine requests.', 'error');
   } else {
     submitButton.disabled = false;
     showToast(res.data.error, 'error');
   }
 });
+
+loadMedicine().then(restoreRequestDraft);

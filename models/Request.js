@@ -5,9 +5,11 @@ const { STATUSES } = require('../utils/validators');
 const requestSchema = new mongoose.Schema(
   {
     medicineId: { type: String, required: true }, // the id of the requested medicine
+    requesterId: { type: String, default: '', index: true },
     requesterName: { type: String, required: true, trim: true },
     requesterType: { type: String, default: 'NGO' },
     contact: { type: String, required: true, trim: true },
+    deliveryAddress: { type: String, required: true, trim: true },
     quantity: { type: String, required: true, trim: true },
     reason: { type: String, default: '' },
     status: { type: String, enum: STATUSES, default: 'pending' },

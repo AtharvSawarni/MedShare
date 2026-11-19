@@ -1,6 +1,16 @@
 /* ---------- Reset & base ---------- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+.field-hint {
+  display: block;
+  min-height: 1.1em;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: var(--gray-500, #6b7280);
+}
+.field-hint.ok { color: var(--teal-dark, #0f7a5c); }
+.field-hint.bad { color: #b91c1c; }
+
 :root {
   --teal: #1f9d78;
   --teal-dark: #0f7a5c;

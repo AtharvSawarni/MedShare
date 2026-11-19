@@ -43,6 +43,14 @@
 
           <div class="form-row">
             <div class="field">
+              <label for="pincode">Pincode (optional)</label>
+              <input type="text" id="pincode" name="pincode" inputmode="numeric" maxlength="6" placeholder="e.g., 122001" autocomplete="postal-code">
+              <span class="field-hint" id="pincode-hint" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
               <label for="pickup-location">Pickup Location / Address <span class="required">*</span></label>
               <input type="text" id="pickup-location" name="pickup-location" placeholder="City first, e.g. Gurugram, Sector 45, full address" required>
             </div>

@@ -84,3 +84,39 @@ donateForm.addEventListener('submit', async (e) => {
     showToast(res.data.error, 'error');
   }
 });
+
+const pincodeInput = document.getElementById('pincode');
+const pincodeHint = document.getElementById('pincode-hint');
+
+function setPincodeHint(text, type = '') {
+  pincodeHint.textContent = text;
+  pincodeHint.className = 'field-hint' + (type ? ` ${type}` : '');
+}
+
+pincodeInput.addEventListener('input', async () => {
+  const pin = pincodeInput.value.trim();
+  if (pin.length < 6) {
+    setPincodeHint('');
+    return;
+  }
+  if (!/^\d{6}$/.test(pin)) {
+    setPincodeHint('Pincode must be 6 digits', 'bad');
+    return;
+  }
+
+  setPincodeHint('Looking up...');
+  const response = await API.get(`/api/pincode/${pin}`);
+  if (pincodeInput.value.trim() !== pin) return;
+
+  if (!response.ok) {
+    setPincodeHint(response.data.error, 'bad');
+    return;
+  }
+
+  const place = `${response.data.city}, ${response.data.state}`;
+  setPincodeHint(`Found: ${place}`, 'ok');
+  const locationInput = donateForm.elements['pickup-location'];
+  if (!locationInput.value.trim()) locationInput.value = place;
+});
+
+donateForm.addEventListener('reset', () => setPincodeHint(''));
